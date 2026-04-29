@@ -14,9 +14,10 @@
             font-family: 'Poppins', sans-serif; background-color: var(--dark); color: white;
         }
 
+        /* Fondo Animado de Líneas */
         #vanta-bg { position: fixed; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
 
-        /* Capa de Personajes */
+        /* Capa de Personajes con Parallax */
         .char-layer {
             position: fixed; width: 100%; height: 100%;
             pointer-events: none; z-index: 0;
@@ -24,10 +25,9 @@
         }
 
         .char { 
-            width: 40vw; max-width: 450px; height: auto; 
-            filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));
+            width: 42vw; max-width: 480px; height: auto; 
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.9));
             transition: transform 0.1s ease-out;
-            margin-bottom: -20px; /* Ajuste para que salgan desde abajo */
         }
 
         .container {
@@ -35,7 +35,7 @@
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; min-height: 100vh; text-align: center; 
             padding: 20px;
-            background: radial-gradient(circle, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.8) 100%);
+            background: radial-gradient(circle, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.8) 100%);
         }
 
         h1 {
@@ -44,24 +44,26 @@
             font-weight: 600;
         }
 
-        .button-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 320px; margin-top: 30px; }
+        .button-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 320px; margin-top: 25px; }
 
         .btn {
-            text-decoration: none; padding: 18px; border-radius: 12px;
+            text-decoration: none; padding: 16px; border-radius: 12px;
             font-weight: 600; text-transform: uppercase; transition: 0.3s;
-            text-align: center; cursor: pointer; border: none; font-size: 0.9rem;
+            text-align: center; cursor: pointer; border: none; font-size: 0.85rem;
             display: block;
         }
 
         .btn-canal { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
         .btn-retiros { background: rgba(0,0,0,0.8); color: var(--gold); border: 1px solid var(--gold); backdrop-filter: blur(10px); }
-        .btn-lineas { background: var(--green); color: white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+        
+        /* Botones de Soporte WhatsApp */
+        .btn-lineas { background: var(--green); color: white; font-size: 0.75rem; padding: 12px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); }
+        .support-label { font-size: 0.7rem; opacity: 0.8; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;}
 
-        .btn:hover { transform: translateY(-5px); filter: brightness(1.1); }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
 
-        /* Ajuste Celular */
         @media (max-width: 768px) {
-            .char { width: 48vw; opacity: 0.7; }
+            .char { width: 50vw; opacity: 0.6; }
             h1 { letter-spacing: 6px; }
         }
     </style>
@@ -70,21 +72,31 @@
 
     <div id="vanta-bg"></div>
 
+    <!-- Capa de personajes (Asegúrate de subirlos con estos nombres exactos) -->
     <div class="char-layer">
-        <!-- Reemplaza 'personaje1.png' y 'personaje2.png' por los nombres exactos de tus fotos subidas -->
         <img src="personaje1.png" class="char" id="imgL" alt="">
         <img src="personaje2.png" class="char" id="imgR" alt="">
     </div>
 
     <div class="container">
         <h1>OASIS</h1>
+        
         <div class="button-group">
+            <!-- CANAL ACTUALIZADO -->
             <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-canal">Canal Oficial</a>
+            
+            <!-- BOTÓN RETIROS (CALLBELL) -->
             <div onclick="openChat()" class="btn btn-retiros">RETIROS</div>
-            <a href="https://wa.me/PON_TU_NUMERO_AQUI" class="btn btn-lineas">Líneas Activas (Soporte)</a>
+            
+            <!-- LÍNEAS DE SOPORTE VINCULADAS -->
+            <div class="support-label">Soporte Activo:</div>
+            <a href="https://wa.me/595991985831" class="btn btn-lineas">Línea de Soporte 1</a>
+            <a href="https://wa.me/595992199076" class="btn btn-lineas">Línea de Soporte 2</a>
+            <a href="https://wa.me/595992736161" class="btn btn-lineas">Línea de Soporte 3</a>
         </div>
     </div>
 
+    <!-- SCRIPTS PARA ANIMACIÓN 3D -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.lines.min.js"></script>
     
@@ -96,10 +108,10 @@
           points: 10.00, maxDistance: 22.00, spacing: 18.00
         });
 
-        // Efecto de movimiento 3D (Parallax)
+        // Efecto Parallax (Mover personajes con el mouse/celular)
         document.addEventListener("mousemove", (e) => {
-            const moveX = (window.innerWidth / 2 - e.pageX) / 25;
-            const moveY = (window.innerHeight / 2 - e.pageY) / 25;
+            const moveX = (window.innerWidth / 2 - e.pageX) / 30;
+            const moveY = (window.innerHeight / 2 - e.pageY) / 30;
             document.getElementById("imgL").style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
             document.getElementById("imgR").style.transform = `translateX(${-moveX}px) translateY(${moveY}px)`;
         });
@@ -107,126 +119,7 @@
         function openChat() { if (window.callbell) { window.callbell.open(); } }
     </script>
 
-    <!-- Script de Callbell -->
-    <script>
-      window.callbellSettings = {
-        uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
-        script_token: "GMfea5tb5E84JacftXguuZba"
-      };
-      (function(){var w=window;var d=document;var l=function(){var s=d.createElement('script');s.async=true;s.src='https://dash.callbell.eu/include/livechat/'+window.callbellSettings.script_token+'/'+window.callbellSettings.uuid+'.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};w.addEventListener('load',l,false);})();
-    </script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oasis - Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-    
-    <style>
-        :root { --gold: #d4af37; --dark: #0a0a0a; --green: #25d366; }
-
-        body, html {
-            margin: 0; padding: 0; height: 100%; overflow: hidden;
-            font-family: 'Poppins', sans-serif; background-color: var(--dark); color: white;
-        }
-
-        #vanta-bg { position: fixed; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
-
-        /* Capa de Personajes */
-        .char-layer {
-            position: fixed; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0;
-            display: flex; justify-content: space-between; align-items: flex-end;
-        }
-
-        .char { 
-            width: 40vw; max-width: 450px; height: auto; 
-            filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));
-            transition: transform 0.1s ease-out;
-            margin-bottom: -20px; /* Ajuste para que salgan desde abajo */
-        }
-
-        .container {
-            position: relative; z-index: 2;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; min-height: 100vh; text-align: center; 
-            padding: 20px;
-            background: radial-gradient(circle, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.8) 100%);
-        }
-
-        h1 {
-            font-size: clamp(3rem, 10vw, 5rem); letter-spacing: 12px;
-            margin: 0; color: var(--gold); text-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
-            font-weight: 600;
-        }
-
-        .button-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 320px; margin-top: 30px; }
-
-        .btn {
-            text-decoration: none; padding: 18px; border-radius: 12px;
-            font-weight: 600; text-transform: uppercase; transition: 0.3s;
-            text-align: center; cursor: pointer; border: none; font-size: 0.9rem;
-            display: block;
-        }
-
-        .btn-canal { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
-        .btn-retiros { background: rgba(0,0,0,0.8); color: var(--gold); border: 1px solid var(--gold); backdrop-filter: blur(10px); }
-        .btn-lineas { background: var(--green); color: white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
-
-        .btn:hover { transform: translateY(-5px); filter: brightness(1.1); }
-
-        /* Ajuste Celular */
-        @media (max-width: 768px) {
-            .char { width: 48vw; opacity: 0.7; }
-            h1 { letter-spacing: 6px; }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="vanta-bg"></div>
-
-    <div class="char-layer">
-        <!-- Reemplaza 'personaje1.png' y 'personaje2.png' por los nombres exactos de tus fotos subidas -->
-        <img src="personaje1.png" class="char" id="imgL" alt="">
-        <img src="personaje2.png" class="char" id="imgR" alt="">
-    </div>
-
-    <div class="container">
-        <h1>OASIS</h1>
-        <div class="button-group">
-            <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-canal">Canal Oficial</a>
-            <div onclick="openChat()" class="btn btn-retiros">RETIROS</div>
-            <a href="https://wa.me/PON_TU_NUMERO_AQUI" class="btn btn-lineas">Líneas Activas (Soporte)</a>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.lines.min.js"></script>
-    
-    <script>
-        VANTA.LINES({
-          el: "#vanta-bg",
-          mouseControls: true, touchControls: true,
-          color: 0xd4af37, backgroundColor: 0x0a0a0a,
-          points: 10.00, maxDistance: 22.00, spacing: 18.00
-        });
-
-        // Efecto de movimiento 3D (Parallax)
-        document.addEventListener("mousemove", (e) => {
-            const moveX = (window.innerWidth / 2 - e.pageX) / 25;
-            const moveY = (window.innerHeight / 2 - e.pageY) / 25;
-            document.getElementById("imgL").style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
-            document.getElementById("imgR").style.transform = `translateX(${-moveX}px) translateY(${moveY}px)`;
-        });
-
-        function openChat() { if (window.callbell) { window.callbell.open(); } }
-    </script>
-
-    <!-- Script de Callbell -->
+    <!-- SCRIPT DE CALLBELL -->
     <script>
       window.callbellSettings = {
         uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
