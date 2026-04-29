@@ -7,40 +7,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
-        :root { --gold: #d4af37; --dark: #0a0a0a; }
+        :root { --gold: #d4af37; --dark: #0a0a0a; --green: #25d366; }
 
         body, html {
             margin: 0; padding: 0; height: 100%; overflow: hidden;
             font-family: 'Poppins', sans-serif; background-color: var(--dark); color: white;
         }
 
-        /* Fondo Animado de Líneas */
-        #vanta-bg { position: fixed; width: 100%; height: 100%; z-index: -1; opacity: 0.5; }
+        #vanta-bg { position: fixed; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
 
-        /* Capa de Personajes con efecto 3D */
+        /* Capa de Personajes */
         .char-layer {
             position: fixed; width: 100%; height: 100%;
             pointer-events: none; z-index: 0;
             display: flex; justify-content: space-between; align-items: flex-end;
-            padding: 0 5%; box-sizing: border-box;
         }
 
         .char { 
-            width: 35vw; max-width: 400px; height: auto; 
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+            width: 40vw; max-width: 450px; height: auto; 
+            filter: drop-shadow(0 0 15px rgba(0,0,0,0.9));
             transition: transform 0.1s ease-out;
+            margin-bottom: -20px; /* Ajuste para que salgan desde abajo */
         }
 
         .container {
             position: relative; z-index: 2;
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; min-height: 100vh; text-align: center; 
-            padding: 20px; background: radial-gradient(circle, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.9) 100%);
+            padding: 20px;
+            background: radial-gradient(circle, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.8) 100%);
         }
 
         h1 {
-            font-size: clamp(2.5rem, 8vw, 4rem); letter-spacing: 10px;
-            margin: 0; color: var(--gold); text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            font-size: clamp(3rem, 10vw, 5rem); letter-spacing: 12px;
+            margin: 0; color: var(--gold); text-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+            font-weight: 600;
         }
 
         .button-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 320px; margin-top: 30px; }
@@ -49,16 +50,19 @@
             text-decoration: none; padding: 18px; border-radius: 12px;
             font-weight: 600; text-transform: uppercase; transition: 0.3s;
             text-align: center; cursor: pointer; border: none; font-size: 0.9rem;
+            display: block;
         }
 
         .btn-canal { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
-        .btn-retiros { background: rgba(0,0,0,0.7); color: var(--gold); border: 1px solid var(--gold); backdrop-filter: blur(5px); }
-        .btn-lineas { background: #25d366; color: white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+        .btn-retiros { background: rgba(0,0,0,0.8); color: var(--gold); border: 1px solid var(--gold); backdrop-filter: blur(10px); }
+        .btn-lineas { background: var(--green); color: white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
 
-        .btn:hover { transform: translateY(-3px) scale(1.02); }
+        .btn:hover { transform: translateY(-5px); filter: brightness(1.1); }
 
+        /* Ajuste Celular */
         @media (max-width: 768px) {
-            .char { width: 45vw; opacity: 0.6; }
+            .char { width: 48vw; opacity: 0.7; }
+            h1 { letter-spacing: 6px; }
         }
     </style>
 </head>
@@ -66,22 +70,18 @@
 
     <div id="vanta-bg"></div>
 
-    <!-- Personajes (Debes subir estas imágenes a tu GitHub o usar links directos) -->
-    <div class="char-layer" id="parallax">
-        <img src="https://i.ibb.co/68XwzB0/char1.png" class="char" style="transform: translateZ(20px);" alt="">
-        <img src="https://i.ibb.co/zXqXyS0/char2.png" class="char" style="transform: translateZ(50px);" alt="">
+    <div class="char-layer">
+        <!-- Reemplaza 'personaje1.png' y 'personaje2.png' por los nombres exactos de tus fotos subidas -->
+        <img src="personaje1.png" class="char" id="imgL" alt="">
+        <img src="personaje2.png" class="char" id="imgR" alt="">
     </div>
 
     <div class="container">
         <h1>OASIS</h1>
         <div class="button-group">
-            <!-- LINK CORREGIDO -->
             <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-canal">Canal Oficial</a>
-            
             <div onclick="openChat()" class="btn btn-retiros">RETIROS</div>
-            
-            <!-- NUEVA OPCIÓN LÍNEAS ACTIVAS -->
-            <a href="https://wa.me/TU_NUMERO_DE_SOPORTE" class="btn btn-lineas">Líneas Activas (Soporte)</a>
+            <a href="https://wa.me/PON_TU_NUMERO_AQUI" class="btn btn-lineas">Líneas Activas (Soporte)</a>
         </div>
     </div>
 
@@ -93,17 +93,15 @@
           el: "#vanta-bg",
           mouseControls: true, touchControls: true,
           color: 0xd4af37, backgroundColor: 0x0a0a0a,
-          points: 8.00, maxDistance: 20.00, spacing: 20.00
+          points: 10.00, maxDistance: 22.00, spacing: 18.00
         });
 
-        // Efecto 3D suave al mover el mouse
+        // Efecto de movimiento 3D (Parallax)
         document.addEventListener("mousemove", (e) => {
-            const chars = document.querySelectorAll(".char");
-            const x = (window.innerWidth / 2 - e.pageX) / 30;
-            const y = (window.innerHeight / 2 - e.pageY) / 30;
-            chars.forEach(char => {
-                char.style.transform = `translateX(${x}px) translateY(${y}px)`;
-            });
+            const moveX = (window.innerWidth / 2 - e.pageX) / 25;
+            const moveY = (window.innerHeight / 2 - e.pageY) / 25;
+            document.getElementById("imgL").style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+            document.getElementById("imgR").style.transform = `translateX(${-moveX}px) translateY(${moveY}px)`;
         });
 
         function openChat() { if (window.callbell) { window.callbell.open(); } }
