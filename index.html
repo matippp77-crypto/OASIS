@@ -7,70 +7,58 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
+        :root { --gold: #d4af37; --dark: #0a0a0a; }
+
         body, html {
-            margin: 0; padding: 0; height: 100%; overflow-x: hidden;
-            font-family: 'Poppins', sans-serif; background-color: #0a0a0a; color: white;
+            margin: 0; padding: 0; height: 100%; overflow: hidden;
+            font-family: 'Poppins', sans-serif; background-color: var(--dark); color: white;
         }
 
-        /* Fondo de líneas 3D */
-        #vanta-bg { position: fixed; width: 100%; height: 100%; z-index: -1; }
+        /* Fondo Animado de Líneas */
+        #vanta-bg { position: fixed; width: 100%; height: 100%; z-index: -1; opacity: 0.5; }
+
+        /* Capa de Personajes con efecto 3D */
+        .char-layer {
+            position: fixed; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            display: flex; justify-content: space-between; align-items: flex-end;
+            padding: 0 5%; box-sizing: border-box;
+        }
+
+        .char { 
+            width: 35vw; max-width: 400px; height: auto; 
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+            transition: transform 0.1s ease-out;
+        }
 
         .container {
+            position: relative; z-index: 2;
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; min-height: 100vh; text-align: center; 
-            padding: 20px; box-sizing: border-box;
+            padding: 20px; background: radial-gradient(circle, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.9) 100%);
         }
 
         h1 {
-            font-size: clamp(2.5rem, 8vw, 4rem); /* Tamaño fluido según pantalla */
-            letter-spacing: clamp(5px, 2vw, 12px);
-            text-transform: uppercase;
-            margin: 0; color: #d4af37; 
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+            font-size: clamp(2.5rem, 8vw, 4rem); letter-spacing: 10px;
+            margin: 0; color: var(--gold); text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
 
-        .subtitle { 
-            font-weight: 300; opacity: 0.6; margin-bottom: 40px; 
-            letter-spacing: 2px; font-size: clamp(0.7rem, 2vw, 0.9rem); 
-        }
-
-        /* Contenedor de botones adaptables */
-        .button-group { 
-            display: flex; flex-direction: column; gap: 18px; 
-            width: 100%; max-width: 350px; 
-        }
+        .button-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 320px; margin-top: 30px; }
 
         .btn {
-            text-decoration: none; padding: 20px; border-radius: 15px;
-            font-weight: 600; text-transform: uppercase; transition: 0.4s;
-            text-align: center; font-size: 1rem; letter-spacing: 1px;
-            cursor: pointer; border: none; outline: none;
-            display: block;
+            text-decoration: none; padding: 18px; border-radius: 12px;
+            font-weight: 600; text-transform: uppercase; transition: 0.3s;
+            text-align: center; cursor: pointer; border: none; font-size: 0.9rem;
         }
 
-        /* Botón Dorado (Canal) */
-        .btn-canal { 
-            background: #d4af37; color: #000; 
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3); 
-        }
-        
-        /* Botón Estilo Negro/Dorado (Retiros) */
-        .btn-retiros {
-            background: rgba(0, 0, 0, 0.6); color: #d4af37; 
-            border: 1px solid #d4af37;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
+        .btn-canal { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+        .btn-retiros { background: rgba(0,0,0,0.7); color: var(--gold); border: 1px solid var(--gold); backdrop-filter: blur(5px); }
+        .btn-lineas { background: #25d366; color: white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
 
-        /* Efectos Hover solo para dispositivos con mouse */
-        @media (hover: hover) {
-            .btn-canal:hover { transform: translateY(-3px); background: #f1c40f; box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5); }
-            .btn-retiros:hover { background: rgba(212, 175, 55, 0.15); transform: translateY(-3px); }
-        }
+        .btn:hover { transform: translateY(-3px) scale(1.02); }
 
-        /* Ajuste para pantallas muy pequeñas */
-        @media (max-width: 380px) {
-            .btn { padding: 16px; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .char { width: 45vw; opacity: 0.6; }
         }
     </style>
 </head>
@@ -78,17 +66,25 @@
 
     <div id="vanta-bg"></div>
 
+    <!-- Personajes (Debes subir estas imágenes a tu GitHub o usar links directos) -->
+    <div class="char-layer" id="parallax">
+        <img src="https://i.ibb.co/68XwzB0/char1.png" class="char" style="transform: translateZ(20px);" alt="">
+        <img src="https://i.ibb.co/zXqXyS0/char2.png" class="char" style="transform: translateZ(50px);" alt="">
+    </div>
+
     <div class="container">
         <h1>OASIS</h1>
-        <p class="subtitle">REFUGIO DIGITAL SEGURO</p>
-        
         <div class="button-group">
-            <a href="https://whatsapp.com/channel/0029Vb7ZyqM3WHTTuRhyNB3M" class="btn btn-canal">Canal Oficial</a>
+            <!-- LINK CORREGIDO -->
+            <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-canal">Canal Oficial</a>
+            
             <div onclick="openChat()" class="btn btn-retiros">RETIROS</div>
+            
+            <!-- NUEVA OPCIÓN LÍNEAS ACTIVAS -->
+            <a href="https://wa.me/TU_NUMERO_DE_SOPORTE" class="btn btn-lineas">Líneas Activas (Soporte)</a>
         </div>
     </div>
 
-    <!-- Scripts de Animación 3D -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.lines.min.js"></script>
     
@@ -96,23 +92,29 @@
         VANTA.LINES({
           el: "#vanta-bg",
           mouseControls: true, touchControls: true,
-          scale: 1.00, scaleMobile: 1.00,
           color: 0xd4af37, backgroundColor: 0x0a0a0a,
-          points: 10.00, maxDistance: 20.00, spacing: 18.00
+          points: 8.00, maxDistance: 20.00, spacing: 20.00
         });
 
-        function openChat() {
-            if (window.callbell) {
-                window.callbell.open();
-            }
-        }
+        // Efecto 3D suave al mover el mouse
+        document.addEventListener("mousemove", (e) => {
+            const chars = document.querySelectorAll(".char");
+            const x = (window.innerWidth / 2 - e.pageX) / 30;
+            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            chars.forEach(char => {
+                char.style.transform = `translateX(${x}px) translateY(${y}px)`;
+            });
+        });
+
+        function openChat() { if (window.callbell) { window.callbell.open(); } }
     </script>
 
     <!-- Script de Callbell -->
     <script>
-      if (!window.callbellSettings) { window.callbellSettings = {} }
-      window.callbellSettings["uuid"] = "7980a6c9-f027-4666-82a7-4258788e21dd";
-      window.callbellSettings["script_token"] = "GMfea5tb5E84JacftXguuZba";
+      window.callbellSettings = {
+        uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
+        script_token: "GMfea5tb5E84JacftXguuZba"
+      };
       (function(){var w=window;var d=document;var l=function(){var s=d.createElement('script');s.async=true;s.src='https://dash.callbell.eu/include/livechat/'+window.callbellSettings.script_token+'/'+window.callbellSettings.uuid+'.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};w.addEventListener('load',l,false);})();
     </script>
 
