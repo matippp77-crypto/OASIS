@@ -1,187 +1,120 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OASIS | Central de Contacto</title>
-  <style>
-    :root {
-      --white: rgba(255, 255, 255, 0.88);
-      --glass: rgba(255, 255, 255, 0.16);
-      --glass-border: rgba(255, 255, 255, 0.28);
-      --dark: #071314;
-      --oasis-green: #2ecc71;
-      --oasis-blue: #00d2ff;
-      --shadow: rgba(0, 0, 0, 0.3);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis - Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0; padding: 0; height: 100%; overflow-x: hidden;
+            font-family: 'Poppins', sans-serif; background-color: #0a0a0a; color: white;
+        }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Fondo de líneas 3D */
+        #vanta-bg { position: fixed; width: 100%; height: 100%; z-index: -1; }
 
-    body {
-      min-height: 100vh;
-      font-family: 'Inter', system-ui, sans-serif;
-      color: var(--white);
-      /* Fondo animado con colores de Oasis */
-      background: linear-gradient(-45deg, #0a2e2b, #134e4a, #075985, #064e3b);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
-      overflow-x: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .container {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 100vh; text-align: center; 
+            padding: 20px; box-sizing: border-box;
+        }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem); /* Tamaño fluido según pantalla */
+            letter-spacing: clamp(5px, 2vw, 12px);
+            text-transform: uppercase;
+            margin: 0; color: #d4af37; 
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+        }
 
-    .container {
-      width: min(1000px, 92%);
-      padding: 40px 0;
-      position: relative;
-      z-index: 1;
-    }
+        .subtitle { 
+            font-weight: 300; opacity: 0.6; margin-bottom: 40px; 
+            letter-spacing: 2px; font-size: clamp(0.7rem, 2vw, 0.9rem); 
+        }
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 40px;
-      padding: clamp(30px, 5vw, 60px);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
+        /* Contenedor de botones adaptables */
+        .button-group { 
+            display: flex; flex-direction: column; gap: 18px; 
+            width: 100%; max-width: 350px; 
+        }
 
-    .header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
+        .btn {
+            text-decoration: none; padding: 20px; border-radius: 15px;
+            font-weight: 600; text-transform: uppercase; transition: 0.4s;
+            text-align: center; font-size: 1rem; letter-spacing: 1px;
+            cursor: pointer; border: none; outline: none;
+            display: block;
+        }
 
-    .brand-name {
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--oasis-green);
-      margin-bottom: 15px;
-      display: block;
-    }
+        /* Botón Dorado (Canal) */
+        .btn-canal { 
+            background: #d4af37; color: #000; 
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3); 
+        }
+        
+        /* Botón Estilo Negro/Dorado (Retiros) */
+        .btn-retiros {
+            background: rgba(0, 0, 0, 0.6); color: #d4af37; 
+            border: 1px solid #d4af37;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
 
-    h1 {
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      line-height: 1;
-      margin-bottom: 20px;
-      font-weight: 900;
-    }
+        /* Efectos Hover solo para dispositivos con mouse */
+        @media (hover: hover) {
+            .btn-canal:hover { transform: translateY(-3px); background: #f1c40f; box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5); }
+            .btn-retiros:hover { background: rgba(212, 175, 55, 0.15); transform: translateY(-3px); }
+        }
 
-    .highlight {
-      background: linear-gradient(to right, #2ecc71, #00d2ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    p {
-      font-size: 1.2rem;
-      color: rgba(255, 255, 255, 0.7);
-      max-width: 600px;
-      margin: 0 auto 40px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .btn-contact {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 20px;
-      text-decoration: none;
-      color: white;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .btn-contact:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-5px);
-      border-color: var(--oasis-green);
-      box-shadow: 0 10px 20px rgba(46, 204, 113, 0.2);
-    }
-
-    .icon-circle {
-      width: 50px;
-      height: 50px;
-      background: var(--oasis-green);
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
-    }
-
-    .num-info span {
-      display: block;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--oasis-green);
-      font-weight: 700;
-    }
-
-    .num-info strong {
-      font-size: 1.1rem;
-      letter-spacing: 0.5px;
-    }
-
-    @media (max-width: 600px) {
-      .glass-card { padding: 30px 20px; }
-      h1 { font-size: 2.8rem; }
-    }
-  </style>
+        /* Ajuste para pantallas muy pequeñas */
+        @media (max-width: 380px) {
+            .btn { padding: 16px; font-size: 0.9rem; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="glass-card">
-      <div class="header">
-        <span class="brand-name">Oasis</span>
-        <h1>Tu <span class="highlight">Oasis</span> de Atención Directa</h1>
-        <p>Si no recibes respuesta en una línea, nuestro equipo te espera en las siguientes opciones.</p>
-      </div>
+    <div id="vanta-bg"></div>
 
-      <div class="grid" id="links">
+    <div class="container">
+        <h1>OASIS</h1>
+        <p class="subtitle">REFUGIO DIGITAL SEGURO</p>
+        
+        <div class="button-group">
+            <a href="https://whatsapp.com/channel/0029Vb7ZyqM3WHTTuRhyNB3M" class="btn btn-canal">Canal Oficial</a>
+            <div onclick="openChat()" class="btn btn-retiros">RETIROS</div>
         </div>
     </div>
-  </div>
 
-  <script>
-    const numbers = [
-      "595992056044", "595992656438", "595993496972", "595972884337",
-      "595992237429", "595993482833", "595992659425", "595992187028"
-    ];
+    <!-- Scripts de Animación 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.lines.min.js"></script>
+    
+    <script>
+        VANTA.LINES({
+          el: "#vanta-bg",
+          mouseControls: true, touchControls: true,
+          scale: 1.00, scaleMobile: 1.00,
+          color: 0xd4af37, backgroundColor: 0x0a0a0a,
+          points: 10.00, maxDistance: 20.00, spacing: 18.00
+        });
 
-    const container = document.getElementById('links');
+        function openChat() {
+            if (window.callbell) {
+                window.callbell.open();
+            }
+        }
+    </script>
 
-    numbers.forEach((num, index) => {
-      const formatted = `+${num.slice(0, 3)} ${num.slice(3, 6)} ${num.slice(6)}`;
-      container.innerHTML += `
-        <a href="https://wa.me/${num}" class="btn-contact" target="_blank">
-          <div class="icon-circle">
-            <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.223-3.673l.356.211c1.456.864 3.111 1.32 4.808 1.322l.001-.001c5.676 0 10.294-4.617 10.297-10.293.002-2.751-1.07-5.336-3.018-7.284s-4.533-3.018-7.282-3.02c-5.676 0-10.292 4.616-10.295 10.293-.001 2.016.587 3.98 1.701 5.698l.232.355-1.01 3.693 3.786-.993z"/></svg>
-          </div>
-          <div class="num-info">
-            <span>Línea Oasis ${index + 1}</span>
-            <strong>${formatted}</strong>
-          </div>
-        </a>
-      `;
-    });
-  </script>
+    <!-- Script de Callbell -->
+    <script>
+      if (!window.callbellSettings) { window.callbellSettings = {} }
+      window.callbellSettings["uuid"] = "7980a6c9-f027-4666-82a7-4258788e21dd";
+      window.callbellSettings["script_token"] = "GMfea5tb5E84JacftXguuZba";
+      (function(){var w=window;var d=document;var l=function(){var s=d.createElement('script');s.async=true;s.src='https://dash.callbell.eu/include/livechat/'+window.callbellSettings.script_token+'/'+window.callbellSettings.uuid+'.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};w.addEventListener('load',l,false);})();
+    </script>
+
 </body>
 </html>
