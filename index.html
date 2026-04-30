@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto Oficial | Oasis</title>
-    <!-- Fuentes Premium -->
+    <title>Oasis | Central de Contacto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --accent: #25D366; /* WhatsApp Green */
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent-wa: #25D366;
             --gold: #d4af37;
             --text: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-box: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body, html {
             height: 100%;
             font-family: 'Poppins', sans-serif;
             background: #050a0f;
             color: var(--text);
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Contenedor 3D de Escena */
         #vanta-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -33,10 +31,10 @@
             z-index: 1;
         }
 
-        /* Capas de Ambiente (Isla y Palmeras) */
+        /* Ambiente Isla */
         .environment-layer {
             position: fixed;
-            bottom: -50px;
+            bottom: -20px;
             width: 100%;
             height: 100%;
             pointer-events: none;
@@ -45,160 +43,131 @@
             justify-content: space-between;
             align-items: flex-end;
             padding: 0 5%;
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+            opacity: 0.6;
         }
 
         .palm {
-            width: 30vw;
-            max-width: 400px;
-            height: auto;
+            width: 25vw;
+            max-width: 350px;
+            animation: windSway 8s ease-in-out infinite;
             transform-origin: bottom center;
-            animation: windSway 6s ease-in-out infinite;
-            opacity: 0.8;
         }
 
-        .palm-right { transform: scaleX(-1); animation-delay: -2s; }
+        .palm-right { transform: scaleX(-1); animation-delay: -3s; }
 
         @keyframes windSway {
-            0%, 100% { transform: rotate(0deg) skewX(0deg); }
-            50% { transform: rotate(2deg) skewX(1deg); }
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(3deg) skewX(1deg); }
         }
 
-        /* Contenido Principal */
+        /* Contenido */
         main {
             position: relative;
             z-index: 10;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at center, rgba(10, 20, 30, 0.4) 0%, transparent 70%);
-            padding: 20px;
-            text-align: center;
+            padding: 40px 20px;
+            background: radial-gradient(circle at center, rgba(10, 25, 40, 0.3) 0%, transparent 80%);
         }
 
         .header-section {
-            margin-bottom: 40px;
-            max-width: 600px;
-            animation: fadeInDown 1s ease-out;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
         }
 
         h1 {
-            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-size: clamp(2.5rem, 8vw, 4rem);
             font-weight: 600;
-            margin-bottom: 10px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            letter-spacing: 4px;
         }
 
-        p.subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-            font-weight: 300;
-            line-height: 1.5;
+        .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            max-width: 500px;
+            margin: 10px auto;
         }
 
-        /* Tarjetas Glassmorphism */
-        .cards-container {
+        /* Contenedor de Opciones */
+        .options-grid {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             perspective: 1000px;
         }
 
-        .contact-card {
+        .card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 20px 30px;
+            border-radius: 18px;
+            padding: 18px 25px;
             text-decoration: none;
             color: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: fadeInUp 0.6s ease-out both;
+            cursor: pointer;
         }
 
-        .contact-card:nth-child(2) { animation-delay: 0.2s; }
-        .contact-card:nth-child(3) { animation-delay: 0.4s; }
+        /* Estilos específicos por tipo */
+        .card-main { border-left: 4px solid var(--gold); }
+        .card-chat { border-left: 4px solid #3498db; }
+        .card-wa { border-left: 4px solid var(--accent-wa); }
 
-        .contact-card:hover {
+        .card:hover {
             transform: translateY(-5px) scale(1.02);
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--accent);
-            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
-        .card-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .info { display: flex; align-items: center; gap: 15px; text-align: left; }
+        
+        .icon-circle {
+            width: 45px; height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .wa-icon {
-            width: 40px;
-            height: 40px;
-            fill: var(--accent);
-            filter: drop-shadow(0 0 5px rgba(37, 211, 102, 0.5));
-        }
-
-        .number-box {
-            text-align: left;
-        }
+        .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; }
+        .title { font-size: 1.1rem; font-weight: 600; display: block; }
 
         .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
+            width: 8px; height: 8px;
+            background: var(--accent-wa);
             border-radius: 50%;
-            margin-right: 8px;
-            box-shadow: 0 0 10px var(--accent);
+            display: inline-block;
+            margin-right: 5px;
+            box-shadow: 0 0 10px var(--accent-wa);
             animation: pulse 2s infinite;
-        }
-
-        .number-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .arrow {
-            opacity: 0.5;
-            transition: transform 0.3s ease;
-        }
-
-        .contact-card:hover .arrow {
-            transform: translateX(5px);
-            opacity: 1;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
+            50% { transform: scale(1.4); opacity: 0.5; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .palm { width: 45vw; }
-            h1 { font-size: 2.2rem; }
-            .cards-container { max-width: 90%; }
+        .section-divider {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 20px 0 10px;
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -207,113 +176,129 @@
     <div id="vanta-canvas"></div>
 
     <div class="environment-layer">
-        <!-- SVG de Palmeras Modernas (Siluetas dinámicas) -->
         <svg class="palm" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="#021a0a" d="M100,200 Q90,150 100,100 Q110,150 100,200 Z" />
-            <path fill="#042a10" d="M100,100 Q60,80 20,110 Q60,95 100,100 Z" />
+            <path fill="#053a15" d="M100,100 Q60,80 20,110 Q60,95 100,100 Z" />
             <path fill="#053a15" d="M100,100 Q70,50 40,30 Q80,60 100,100 Z" />
-            <path fill="#042a10" d="M100,100 Q130,50 160,30 Q120,60 100,100 Z" />
+            <path fill="#053a15" d="M100,100 Q130,50 160,30 Q120,60 100,100 Z" />
             <path fill="#053a15" d="M100,100 Q140,80 180,110 Q140,95 100,100 Z" />
         </svg>
         <svg class="palm palm-right" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="#021a0a" d="M100,200 Q90,150 100,100 Q110,150 100,200 Z" />
-            <path fill="#042a10" d="M100,100 Q60,80 20,110 Q60,95 100,100 Z" />
+            <path fill="#053a15" d="M100,100 Q60,80 20,110 Q60,95 100,100 Z" />
             <path fill="#053a15" d="M100,100 Q70,50 40,30 Q80,60 100,100 Z" />
-            <path fill="#042a10" d="M100,100 Q130,50 160,30 Q120,60 100,100 Z" />
+            <path fill="#053a15" d="M100,100 Q130,50 160,30 Q120,60 100,100 Z" />
             <path fill="#053a15" d="M100,100 Q140,80 180,110 Q140,95 100,100 Z" />
         </svg>
     </div>
 
     <main>
         <div class="header-section">
-            <h1>¡Estamos aquí para ayudarte!</h1>
-            <p class="subtitle">Si no lográs contactarnos en un número, intentá con nuestras líneas alternativas.</p>
+            <h1>OASIS</h1>
+            <p class="subtitle">¡Estamos aquí para ayudarte! Selecciona una opción para comenzar.</p>
         </div>
 
-        <div class="cards-container">
-            <!-- Línea 1 -->
-            <a href="https://wa.me/595993482833" target="_blank" class="contact-card">
-                <div class="card-info">
-                    <svg class="wa-icon" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.89 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.743-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.767.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                    <div class="number-box">
-                        <span class="status-dot"></span><small style="text-transform: uppercase; letter-spacing: 2px;">Línea 1</small>
-                        <div class="number-text">+595 993 482 833</div>
+        <div class="options-grid">
+            <!-- CANAL OFICIAL -->
+            <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" target="_blank" class="card card-main">
+                <div class="info">
+                    <div class="icon-circle">📢</div>
+                    <div>
+                        <span class="label">Comunidad</span>
+                        <span class="title">Canal Oficial</span>
                     </div>
                 </div>
-                <div class="arrow">→</div>
+                <span>→</span>
             </a>
 
-            <!-- Línea 2 -->
-            <a href="https://wa.me/595992659425" target="_blank" class="contact-card">
-                <div class="card-info">
-                    <svg class="wa-icon" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.89 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.743-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.767.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                    <div class="number-box">
-                        <span class="status-dot"></span><small style="text-transform: uppercase; letter-spacing: 2px;">Línea 2</small>
-                        <div class="number-text">+595 992 659 425</div>
+            <!-- WEB CHAT / RETIROS -->
+            <div onclick="openChat()" class="card card-chat">
+                <div class="info">
+                    <div class="icon-circle">💰</div>
+                    <div>
+                        <span class="label">Soporte Web</span>
+                        <span class="title">Retiros & Consultas</span>
                     </div>
                 </div>
-                <div class="arrow">→</div>
+                <span>→</span>
+            </div>
+
+            <div class="section-divider">Líneas de Respaldo</div>
+
+            <!-- WHATSAPP 1 -->
+            <a href="https://wa.me/595993482833" target="_blank" class="card card-wa">
+                <div class="info">
+                    <div class="icon-circle">🟢</div>
+                    <div>
+                        <span class="label"><span class="status-dot"></span>Activa</span>
+                        <span class="title">+595 993 482 833</span>
+                    </div>
+                </div>
+                <span>→</span>
             </a>
 
-            <!-- Línea 3 -->
-            <a href="https://wa.me/595992187028" target="_blank" class="contact-card">
-                <div class="card-info">
-                    <svg class="wa-icon" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.89 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.743-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.767.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                    <div class="number-box">
-                        <span class="status-dot"></span><small style="text-transform: uppercase; letter-spacing: 2px;">Línea 3</small>
-                        <div class="number-text">+595 992 187 028</div>
+            <!-- WHATSAPP 2 -->
+            <a href="https://wa.me/595992659425" target="_blank" class="card card-wa">
+                <div class="info">
+                    <div class="icon-circle">🟢</div>
+                    <div>
+                        <span class="label"><span class="status-dot"></span>Activa</span>
+                        <span class="title">+595 992 659 425</span>
                     </div>
                 </div>
-                <div class="arrow">→</div>
+                <span>→</span>
+            </a>
+
+            <!-- WHATSAPP 3 -->
+            <a href="https://wa.me/595992187028" target="_blank" class="card card-wa">
+                <div class="info">
+                    <div class="icon-circle">🟢</div>
+                    <div>
+                        <span class="label"><span class="status-dot"></span>Activa</span>
+                        <span class="title">+595 992 187 028</span>
+                    </div>
+                </div>
+                <span>→</span>
             </a>
         </div>
     </main>
 
-    <!-- Librerías de Animación -->
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
     
     <script>
-        // Inicialización de Aves Realistas con Vanta.js
+        // Animación de Aves Realistas
         VANTA.BIRDS({
             el: "#vanta-canvas",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
+            mouseControls: true, touchControls: true,
+            minHeight: 200.00, minWidth: 200.00,
+            scale: 1.00, scaleMobile: 1.00,
             backgroundColor: 0x050a0f,
-            color1: 0x25d366,
-            color2: 0xd4af37,
-            colorMode: "lerp",
-            birdSize: 1.50,
-            wingSpan: 24.00,
-            speedLimit: 4.00,
-            separation: 50.00,
-            alignment: 20.00,
-            cohesion: 20.00,
-            quantity: 3.00
+            color1: 0x25d366, color2: 0xd4af37,
+            birdSize: 1.80, wingSpan: 20.00,
+            speedLimit: 3.00, quantity: 4.00
         });
 
-        // Efecto de Inclinación 3D en Tarjetas
-        const cards = document.querySelectorAll('.contact-card');
+        // Movimiento 3D Suave
+        const scene = document.querySelector('.options-grid');
         document.addEventListener('mousemove', (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            
-            cards.forEach(card => {
-                card.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
-            });
+            const x = (window.innerWidth / 2 - e.pageX) / 35;
+            const y = (window.innerHeight / 2 - e.pageY) / 35;
+            scene.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
         });
 
-        // Reset de posición al salir el mouse
-        document.addEventListener('mouseleave', () => {
-            cards.forEach(card => {
-                card.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            });
-        });
+        // Integración de Callbell
+        function openChat() { if (window.callbell) { window.callbell.open(); } }
+    </script>
+
+    <!-- Script de Callbell -->
+    <script>
+      window.callbellSettings = {
+        uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
+        script_token: "GMfea5tb5E84JacftXguuZba"
+      };
+      (function(){var w=window;var d=document;var l=function(){var s=d.createElement('script');s.async=true;s.src='https://dash.callbell.eu/include/livechat/'+window.callbellSettings.script_token+'/'+window.callbellSettings.uuid+'.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};w.addEventListener('load',l,false);})();
     </script>
 </body>
 </html>
