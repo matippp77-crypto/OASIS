@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oasis | Elite VIP</title>
+    <title>Oasis Elite | VIP</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -25,7 +25,6 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            overflow-x: hidden;
         }
 
         #vanta-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
@@ -49,10 +48,10 @@
         .button-stack {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 15px;
         }
 
-        /* --- BOTONES 3D --- */
+        /* BOTONES 3D CORREGIDOS */
         .btn-base {
             width: 100%;
             padding: 16px;
@@ -153,8 +152,8 @@
                 🎰 JUGÁ YA 🎰
             </a>
 
-            <!-- BOTÓN RETIROS CON ACCIÓN AL CHAT -->
-            <button onclick="openCallbell()" class="btn-base btn-retiro">
+            <!-- BOTÓN RETIROS SIN ALERTAS MOLESTAS -->
+            <button onclick="forzarChat()" class="btn-base btn-retiro">
                 ⚡ RETIROS ⚡
             </button>
 
@@ -208,13 +207,18 @@
             spacing: 35.00
         });
 
-        // FUNCIÓN PARA ABRIR EL CHAT DIRECTO
-        function openCallbell() {
-            if (window.callbell && window.callbell.open) {
+        // SOLUCIÓN DEFINITIVA PARA RETIROS
+        function forzarChat() {
+            if (window.callbell && typeof window.callbell.open === 'function') {
                 window.callbell.open();
             } else {
-                console.log("Esperando a que Callbell cargue...");
-                alert("El chat se está iniciando, por favor intenta de nuevo en 2 segundos.");
+                // Si no ha cargado aún, lo intentamos cada 500ms automáticamente
+                let intento = setInterval(() => {
+                    if (window.callbell && typeof window.callbell.open === 'function') {
+                        window.callbell.open();
+                        clearInterval(intento);
+                    }
+                }, 500);
             }
         }
 
