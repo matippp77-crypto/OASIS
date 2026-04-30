@@ -3,227 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oasis | Elite VIP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Oasis Elite | VIP</title>
+    <!-- Tipografía Ultra-Premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Playfair+Display:ital,wght@1,900&family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #ffcc00;
-            --green: #2ecc71;
-            --orange: #e67e22;
-            --red-promo: #e74c3c;
-            --bg: #020508;
+            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
         body {
-            background-color: var(--bg);
-            color: white;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
+            overflow: hidden;
+            background: #87CEEB; /* Color cielo base */
         }
 
-        #vanta-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        /* --- FONDO REALISTA 3D --- */
+        #island-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 110%; /* Un poco más grande para el movimiento */
+            height: 110%;
+            background: url('https://images.unsplash.com/photo-1506953823976-52e1bdc0149a?auto=format&fit=crop&q=80&w=2000') no-repeat center center;
+            background-size: cover;
+            z-index: -1;
+            filter: brightness(1.1) saturate(1.2);
+            transition: transform 0.1s ease-out; /* Para el efecto 3D con el mouse */
+        }
+
+        /* --- CAPA DE PÁJAROS --- */
+        .birds {
+            position: absolute;
+            top: 15%;
+            left: -100px;
+            width: 50px;
+            height: 30px;
+            background: url('https://cdn-icons-png.flaticon.com/512/524/524675.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            animation: fly 15s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes fly {
+            0% { transform: translate(0, 0) scale(1); left: -10%; }
+            50% { transform: translate(50vw, 50px) scale(1.2); }
+            100% { transform: translate(110vw, -50px) scale(1); left: 110%; }
+        }
 
         .container {
-            width: 100%;
-            max-width: 450px;
+            width: 90%;
+            max-width: 420px;
             z-index: 10;
             text-align: center;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 40px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
         }
 
         h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--gold);
-            letter-spacing: 8px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff 30%, #ddd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+            margin-bottom: 35px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            line-height: 0.9;
         }
 
-        .button-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
+        .button-stack { display: flex; flex-direction: column; gap: 20px; }
 
-        /* --- BOTONES 3D --- */
+        /* --- BOTONES PREMIUM 3D --- */
         .btn-base {
             width: 100%;
-            padding: 16px;
-            font-size: 1.1rem;
+            padding: 18px;
+            font-size: 1.2rem;
             font-weight: 800;
             text-transform: uppercase;
             text-decoration: none;
-            color: black;
-            border-radius: 10px;
+            color: white;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 12px;
             border: none;
             cursor: pointer;
             position: relative;
-            transition: all 0.1s ease;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.4);
-            top: 0;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 0 rgba(0,0,0,0.15), 0 15px 20px rgba(0,0,0,0.1);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Efecto de hundimiento al presionar */
+        /* Colores inspirados en tu imagen pero más brillantes */
+        .btn-juga { background: linear-gradient(135deg, #FFB800 0%, #FF8A00 100%); }
+        .btn-retiro { background: linear-gradient(135deg, #00D64F 0%, #009E3A 100%); }
+        .btn-cargas { background: linear-gradient(135deg, #FF5C00 0%, #FF2E00 100%); }
+
+        .btn-base:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 0 rgba(0,0,0,0.15), 0 20px 25px rgba(0,0,0,0.15);
+        }
+
         .btn-base:active {
-            top: 4px;
-            box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.15);
         }
 
-        .btn-juga { background: #f1c40f; }
-        .btn-retiro { background: #2ecc71; }
-        .btn-cargas { background: #e67e22; }
-        .btn-promo-header { 
-            background: #e74c3c; 
-            border-radius: 10px 10px 0 0; 
-            color: white; 
-            box-shadow: 0 4px 0 rgba(0,0,0,0.3);
-        }
-
-        /* Contenedor Extra 30% */
-        .promo-container {
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #e74c3c;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .promo-text {
-            padding: 12px;
-            font-size: 0.75rem;
-            color: #eee;
-            line-height: 1.4;
-        }
-
-        /* Menú Cargas */
-        #menu-cargas {
-            display: none;
-            background: rgba(255,255,255,0.05);
+        /* Estilo para la promo */
+        .promo-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
             padding: 10px;
-            border-radius: 0 0 10px 10px;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: -5px;
+            margin-top: -10px;
+            font-size: 0.8rem;
+            color: #333;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .link-carga {
-            color: white;
-            text-decoration: none;
-            font-size: 0.95rem;
-            padding: 12px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 6px;
-        }
-
-        /* Horarios */
-        .horarios-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .horarios {
+            display: flex;
+            justify-content: space-between;
             margin-top: 30px;
+            gap: 10px;
         }
 
         .card-h {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1;
+            background: rgba(255,255,255,0.8);
+            padding: 12px;
+            border-radius: 15px;
+            color: #1a472a;
         }
 
-        .card-h h3 { font-size: 0.6rem; letter-spacing: 1px; color: #aaa; margin-bottom: 5px; }
-        .card-h .time { font-size: 1.6rem; font-weight: 800; color: var(--gold); }
+        .card-h h3 { font-size: 0.55rem; color: #666; text-transform: uppercase; }
+        .card-h div { font-size: 1.3rem; font-weight: 900; }
 
     </style>
 </head>
 <body>
 
-    <div id="vanta-canvas"></div>
+    <!-- Fondo de Isla -->
+    <div id="island-bg"></div>
+    
+    <!-- Pajaritos animados -->
+    <div class="birds" style="top:20%; animation-delay: 0s;"></div>
+    <div class="birds" style="top:10%; animation-delay: 5s;"></div>
 
     <div class="container">
         <h1>OASIS</h1>
 
         <div class="button-stack">
-            <!-- BOTÓN JUGAR -->
             <a href="https://greenvip.net" target="_blank" class="btn-base btn-juga">
-                🎰 JUGÁ YA 🎰
+                🎰 JUGÁ ACÁ 🎰
             </a>
 
-            <!-- BOTÓN RETIROS -->
-            <button onclick="openChat()" class="btn-base btn-retiro">
-                ⚡ RETIROS ⚡
+            <button onclick="openCallbell()" class="btn-base btn-retiro">
+                💰 RETIRÁ AHORA 💰
             </button>
 
-            <!-- SECCIÓN PROMO -->
-            <div class="promo-container">
-                <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" target="_blank" class="btn-base btn-promo-header">
-                    🎁 EXTRA 30% 🎁
+            <div style="display:flex; flex-direction:column; gap:5px;">
+                <a href="https://whatsapp.com/channel/..." class="btn-base btn-cargas">
+                    ⚡ CARGÁ AHORA ⚡
                 </a>
-                <div class="promo-text">
-                    Mandanos una captura y activa la campanita de que ya estas adentro del canal para activar tu bono.
-                </div>
-            </div>
-
-            <!-- CARGAS -->
-            <div>
-                <button onclick="toggleCargas()" class="btn-base btn-cargas">
-                    ⚡ CARGAS RESPALDO! ⚡
-                </button>
-                <div id="menu-cargas">
-                    <a href="https://wa.me/595993482833" class="link-carga">Línea de Carga 1</a>
-                    <a href="https://wa.me/595992659425" class="link-carga">Línea de Carga 2</a>
-                    <a href="https://wa.me/595992187028" class="link-carga">Línea de Carga 3</a>
-                </div>
+                <div class="promo-box">🎁 EXTRA 30% EN TU CARGA 🎁</div>
             </div>
         </div>
 
-        <div class="horarios-row">
+        <div class="horarios">
             <div class="card-h">
-                <h3>HORARIO DE RETIROS</h3>
-                <div class="time">24 HS</div>
+                <h3>RETIROS</h3>
+                <div>24 HS</div>
             </div>
             <div class="card-h">
-                <h3>HORARIO DE CARGAS</h3>
-                <div class="time">24 HS</div>
+                <h3>CARGAS</h3>
+                <div>24 HS</div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts de Fondo y Funcionamiento -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.dots.min.js"></script>
     <script>
-        VANTA.DOTS({
-            el: "#vanta-canvas",
-            mouseControls: true,
-            touchControls: true,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0xffcc00,
-            backgroundColor: 0x020508,
-            size: 1.50,
-            spacing: 35.00
+        // --- EFECTO 3D REALISTA CON EL MOUSE ---
+        const bg = document.getElementById('island-bg');
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 30;
+            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            bg.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
         });
 
-        function openChat() { if (window.callbell) { window.callbell.open(); } }
-        function toggleCargas() {
-            const m = document.getElementById('menu-cargas');
-            m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+        // Función del Chat
+        function openCallbell() {
+            if (window.callbell) { window.callbell.open(); }
         }
     </script>
 
-    <!-- Callbell Script -->
+    <!-- Callbell Script (Mantener el tuyo) -->
     <script>
       window.callbellSettings = {
         uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
