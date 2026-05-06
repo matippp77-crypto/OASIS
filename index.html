@@ -35,37 +35,45 @@
     body {
       font-family: 'Montserrat', sans-serif;
       color: white;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(255, 204, 0, 0.06), transparent 24%),
-        radial-gradient(circle at 80% 80%, rgba(255, 204, 0, 0.04), transparent 28%),
-        linear-gradient(135deg, #020202 0%, #000000 60%, #040404 100%);
       min-height: 100vh;
       overflow-x: hidden;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       position: relative;
+
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(0,0,0,0.92) 0%,
+          rgba(0,0,0,0.78) 38%,
+          rgba(0,0,0,0.34) 100%
+        ),
+        url("assets/img/fondo-oasis.png");
+
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: linear-gradient(
-        90deg,
-        rgba(0,0,0,0.94) 0%,
-        rgba(0,0,0,0.84) 42%,
-        rgba(0,0,0,0.25) 100%
-      );
-      z-index: -6;
+      background:
+        radial-gradient(circle at 45% 18%, rgba(255,204,0,0.10), transparent 28%),
+        radial-gradient(circle at 85% 65%, rgba(37,211,102,0.07), transparent 24%),
+        rgba(0,0,0,0.08);
+      z-index: 0;
       pointer-events: none;
     }
 
-    /* AVES CON ALETEO, SIN JAVASCRIPT */
+    /* AVES ANIMADAS */
     .birds-layer {
       position: fixed;
       inset: 0;
-      z-index: 0;
+      z-index: 1;
       pointer-events: none;
       overflow: hidden;
     }
@@ -74,9 +82,9 @@
       position: absolute;
       width: 52px;
       height: 32px;
-      opacity: 0.72;
+      opacity: 0.62;
       filter:
-        drop-shadow(0 0 4px rgba(255,255,255,0.25))
+        drop-shadow(0 0 4px rgba(255,255,255,0.20))
         drop-shadow(0 6px 8px rgba(0,0,0,0.35));
       animation-timing-function: linear;
       animation-iteration-count: infinite;
@@ -151,7 +159,7 @@
     .bird-b {
       top: 24%;
       left: -120px;
-      opacity: 0.55;
+      opacity: 0.48;
       animation: birdFlyB 17s infinite;
       animation-delay: 3s;
     }
@@ -159,7 +167,7 @@
     .bird-c {
       top: 8%;
       left: -140px;
-      opacity: 0.48;
+      opacity: 0.40;
       animation: birdFlyC 21s infinite;
       animation-delay: 7s;
     }
@@ -167,7 +175,7 @@
     .bird-d {
       top: 34%;
       left: -160px;
-      opacity: 0.42;
+      opacity: 0.34;
       animation: birdFlyD 19s infinite;
       animation-delay: 10s;
     }
@@ -240,8 +248,8 @@
       position: fixed;
       right: -12px;
       bottom: 0;
-      z-index: 1;
-      width: min(40vw, 390px);
+      z-index: 2;
+      width: min(38vw, 370px);
       pointer-events: none;
       opacity: 0.96;
       perspective: 1200px;
@@ -255,7 +263,7 @@
       display: block;
       object-fit: contain;
       filter:
-        drop-shadow(0 14px 26px rgba(0, 0, 0, 0.44))
+        drop-shadow(0 16px 30px rgba(0, 0, 0, 0.60))
         contrast(101%)
         brightness(100%)
         saturate(101%);
@@ -288,7 +296,7 @@
       text-align: center;
       padding: 16px 0 28px;
       position: relative;
-      z-index: 3;
+      z-index: 4;
     }
 
     h1 {
@@ -299,21 +307,24 @@
       text-transform: uppercase;
       margin-bottom: 20px;
       text-shadow:
-        0 0 10px rgba(255, 204, 0, 0.62),
-        0 0 24px rgba(255, 204, 0, 0.18);
+        0 0 10px rgba(255, 204, 0, 0.72),
+        0 0 24px rgba(255, 204, 0, 0.26),
+        0 0 38px rgba(0, 0, 0, 0.80);
       animation: aura 2.2s ease-in-out infinite alternate;
     }
 
     @keyframes aura {
       from {
         text-shadow:
-          0 0 10px rgba(255, 204, 0, 0.55),
-          0 0 24px rgba(255, 204, 0, 0.14);
+          0 0 10px rgba(255, 204, 0, 0.58),
+          0 0 24px rgba(255, 204, 0, 0.18),
+          0 0 38px rgba(0, 0, 0, 0.80);
       }
       to {
         text-shadow:
-          0 0 14px rgba(255, 204, 0, 0.76),
-          0 0 30px rgba(255, 204, 0, 0.22);
+          0 0 15px rgba(255, 204, 0, 0.84),
+          0 0 32px rgba(255, 204, 0, 0.28),
+          0 0 42px rgba(0, 0, 0, 0.85);
       }
     }
 
@@ -343,7 +354,7 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
       box-shadow:
         0 7px 0 rgba(125, 92, 0, 0.96),
-        0 14px 26px rgba(0, 0, 0, 0.42),
+        0 14px 26px rgba(0, 0, 0, 0.52),
         inset 0 2px 0 rgba(255, 255, 255, 0.55);
       user-select: none;
     }
@@ -405,14 +416,14 @@
 
     .canal-wrapper {
       margin-top: 6px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 204, 0, 0.35);
+      background: rgba(0,0,0,0.42);
+      border: 1px solid rgba(255, 204, 0, 0.42);
       border-radius: 24px;
       padding: 16px;
       box-shadow:
         0 0 0 1px rgba(255, 204, 0, 0.05),
-        0 10px 30px rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(4px);
+        0 12px 34px rgba(0, 0, 0, 0.52);
+      backdrop-filter: blur(5px);
     }
 
     .btn-extra {
@@ -432,6 +443,7 @@
       font-size: 0.83rem;
       font-weight: 700;
       line-height: 1.45;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.75);
     }
 
     .canal-text b {
@@ -446,7 +458,7 @@
     }
 
     .status-box {
-      background: rgba(255,255,255,0.03);
+      background: rgba(0,0,0,0.48);
       border: 2px solid var(--gold);
       border-radius: 14px;
       padding: 12px 8px;
@@ -454,14 +466,18 @@
       font-size: 0.80rem;
       font-weight: 900;
       text-transform: uppercase;
-      box-shadow: 0 0 12px rgba(255, 204, 0, 0.10);
+      box-shadow:
+        0 0 12px rgba(255, 204, 0, 0.16),
+        0 8px 18px rgba(0,0,0,0.42);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.80);
     }
 
     .extra-info {
       margin-top: 16px;
       font-size: 0.68rem;
-      color: #818181;
+      color: rgba(255,255,255,0.55);
       font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.80);
     }
 
     /* FLECHA RETIROS */
@@ -499,6 +515,10 @@
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
+      body {
+        background-position: center center;
+      }
+
       .character-container {
         width: min(44vw, 350px);
         right: -6px;
@@ -506,6 +526,11 @@
     }
 
     @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+        background-position: center center;
+      }
+
       .content {
         max-width: 430px;
         padding-top: 14px;
@@ -524,7 +549,7 @@
       }
 
       .real-bird {
-        opacity: 0.42;
+        opacity: 0.35;
       }
 
       #chat-pointer {
