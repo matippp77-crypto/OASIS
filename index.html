@@ -11,6 +11,7 @@
             --gold: #ffcc00;
             --black: #000000;
             --green: #25d366;
+            --red: #ff0000;
         }
 
         body {
@@ -26,7 +27,7 @@
             overflow-x: hidden;
         }
 
-        /* ELIMINACIÓN DE CUADRITOS Y MEZCLA */
+        /* ELIMINACIÓN DE CUADRITOS */
         .character-container {
             position: fixed;
             right: -20px;
@@ -41,7 +42,7 @@
 
         .character-bg {
             width: 100%;
-            filter: contrast(120%) brightness(90%);
+            filter: contrast(125%) brightness(85%);
             -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 95%);
             mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 95%);
         }
@@ -50,29 +51,24 @@
             width: 90%;
             max-width: 450px;
             text-align: center;
-            padding-top: 50px;
+            padding: 40px 0;
             z-index: 2;
         }
 
-        /* OASIS CON AURA LLAMATIVA */
+        /* OASIS CON AURA */
         h1 {
             font-size: 4.5rem;
             color: var(--gold);
             text-transform: uppercase;
             margin: 0;
-            padding: 0;
             letter-spacing: 5px;
-            /* Efecto Aura / Glow */
-            text-shadow: 
-                0 0 10px rgba(255, 204, 0, 0.8),
-                0 0 30px rgba(255, 204, 0, 0.6),
-                0 0 60px rgba(255, 204, 0, 0.4);
-            animation: aura-glow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+            animation: aura 2s ease-in-out infinite alternate;
         }
 
-        @keyframes aura-glow {
-            from { text-shadow: 0 0 10px rgba(255, 204, 0, 0.8), 0 0 30px rgba(255, 204, 0, 0.4); }
-            to { text-shadow: 0 0 20px rgba(255, 204, 0, 1), 0 0 50px rgba(255, 204, 0, 0.8), 0 0 80px rgba(255, 204, 0, 0.6); }
+        @keyframes aura {
+            from { text-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
+            to { text-shadow: 0 0 35px rgba(255, 204, 0, 0.9), 0 0 50px rgba(255, 204, 0, 0.4); }
         }
 
         .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
@@ -84,55 +80,56 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 18px;
-            border-radius: 15px;
+            padding: 16px;
+            border-radius: 12px;
             font-weight: 900;
             font-size: 1.1rem;
             border: none;
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .btn-play { background: #fff; border: 4px solid var(--gold); font-size: 1.3rem; }
-        
-        .btn-whatsapp { background: var(--green); color: white; padding: 15px; margin-top: 5px; }
+        .btn-play { background: #fff; border: 3px solid var(--gold); font-size: 1.3rem; }
+        .btn-whatsapp { background: var(--green); color: white; padding: 12px; font-size: 0.9rem; }
 
-        /* SECCIÓN CANAL REESTRUCTURADA */
-        .canal-container { margin-top: 10px; }
-        .btn-canal {
-            background: linear-gradient(45deg, #ff0000, #cc0000);
-            color: white;
-            font-size: 1.4rem;
-            border: 2px solid white;
-        }
-        .canal-subtext {
+        /* SECCIÓN CANAL REFORZADA */
+        .canal-wrapper { margin-top: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,204,0,0.2); }
+        .btn-extra { background: linear-gradient(45deg, #ff0000, #b30000); color: white; font-size: 1.5rem; border: 2px solid white; margin-bottom: 10px; }
+        .canal-text { color: white; font-size: 0.85rem; font-weight: 600; line-height: 1.4; }
+        .canal-text b { color: var(--gold); }
+
+        /* CUADROS 24HS INFERIORES */
+        .footer-status { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
+        .status-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--gold);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 900;
             color: var(--gold);
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-top: 8px;
-            line-height: 1.4;
-            text-shadow: 1px 1px 2px black;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
         }
 
         #menu-respaldo { display: none; flex-direction: column; gap: 8px; margin-top: 5px; }
 
-        /* FLECHA CHAT */
+        /* FLECHA */
         #chat-pointer {
             display: none;
             position: fixed;
             bottom: 110px;
             right: 40px;
-            z-index: 999;
+            z-index: 1000;
             text-align: center;
             color: var(--gold);
-            animation: jump 0.8s infinite;
+            animation: bounce 0.8s infinite;
         }
 
-        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        .extra-info { font-size: 0.6rem; margin-top: 40px; color: #555; }
+        .extra-info { font-size: 0.6rem; margin-top: 30px; color: #555; }
     </style>
 </head>
 <body>
@@ -149,18 +146,25 @@
             
             <button onclick="toggleCargas()" class="btn">💳 CARGAS RESPALDO</button>
             <div id="menu-respaldo">
-                <a href="https://wa.me/5491122334455" class="btn btn-whatsapp">✅ CARGAS RESPALDO 1</a>
-                <a href="https://wa.me/5491166778899" class="btn btn-whatsapp">✅ CARGAS RESPALDO 2</a>
+                <a href="https://wa.me/5491122334455" class="btn btn-whatsapp">✅ RESPALDO 1</a>
+                <a href="https://wa.me/5491166778899" class="btn btn-whatsapp">✅ RESPALDO 2</a>
             </div>
 
             <button onclick="abrirRetiros()" class="btn">💰 RETIROS (CHAT)</button>
             
-            <!-- Sección Canal con 30% Extra -->
-            <div class="canal-container">
-                <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-canal">📢 SOLO 30% EXTRA</a>
-                <div class="canal-subtext">
-                    unite al canal y activa la campanita <br> y llevate 30% mas 💎🎰
+            <!-- Bloque del Canal -->
+            <div class="canal-wrapper">
+                <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-extra">30% EXTRA 💎</a>
+                <div class="canal-text">
+                    📲 Mandanos una captura mostrando que te uniste al canal y activaste la campanita 🔔<br>
+                    y llevate un <b>30% EXTRA</b> en tu próxima gestión 🚀
                 </div>
+            </div>
+
+            <!-- Cuadros 24hs -->
+            <div class="footer-status">
+                <div class="status-box">🟢 RETIROS 24HS</div>
+                <div class="status-box">🟢 CARGAS 24HS</div>
             </div>
         </div>
 
@@ -168,7 +172,7 @@
     </div>
 
     <div id="chat-pointer">
-        <div style="background:var(--gold); color:black; padding:5px 10px; border-radius:10px; font-weight:900; font-size:0.7rem; margin-bottom:5px;">CHAT DE RETIROS</div>
+        <div style="background:var(--gold); color:black; padding:5px 12px; border-radius:10px; font-weight:900; font-size:0.7rem; margin-bottom:5px;">RETIRÁ AQUÍ</div>
         <i class="fas fa-arrow-down fa-2x"></i>
     </div>
 
@@ -180,15 +184,15 @@
 
         function abrirRetiros() {
             if (window.callbell) window.callbell.open();
-            const p = document.getElementById('chat-pointer');
-            p.style.display = 'block';
-            setTimeout(() => { p.style.display = 'none'; }, 6000);
+            const arrow = document.getElementById('chat-pointer');
+            arrow.style.display = 'block';
+            setTimeout(() => { arrow.style.display = 'none'; }, 7000);
         }
 
         document.addEventListener('mousemove', (e) => {
             const img = document.getElementById('personaje');
-            const x = (window.innerWidth / 2 - e.pageX) / 45;
-            img.style.transform = `translateX(${x}px) rotateY(${x/2}deg)`;
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            img.style.transform = `translateX(${x}px)`;
         });
     </script>
 
