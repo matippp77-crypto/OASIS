@@ -1,709 +1,108 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oasis Elite</title>
+/* AVES MÁS GRANDES CON MOVIMIENTO REALISTA */
+const birdsLayer = document.getElementById('birdsLayer');
+const birds = [];
+const BIRD_COUNT = window.innerWidth < 600 ? 3 : 5;
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+function birdSVG() {
+  return `
+    <svg viewBox="0 0 120 70" aria-hidden="true">
+      <g class="wing-left">
+        <path d="M56 36 C43 7, 18 0, 4 18 C22 18, 38 27, 55 38 Z"></path>
+      </g>
 
-  <style>
-    :root {
-      --gold: #ffcc00;
-      --gold-dark: #9a7400;
-      --gold-soft: rgba(255, 204, 0, 0.25);
-      --black: #000000;
-      --green: #25d366;
-      --green-dark: #128c44;
-      --red: #ff0000;
-      --red-dark: #8f0000;
-      --white: #ffffff;
-      --text-soft: #d8d8d8;
+      <g class="wing-right">
+        <path d="M64 36 C77 7, 102 0, 116 18 C98 18, 82 27, 65 38 Z"></path>
+      </g>
+
+      <ellipse class="body" cx="60" cy="39" rx="13" ry="6"></ellipse>
+      <circle class="head" cx="73" cy="35" r="5"></circle>
+      <path class="beak" d="M78 35 L88 32 L80 38 Z"></path>
+      <path class="tail" d="M47 39 L30 31 L34 43 Z"></path>
+    </svg>
+  `;
+}
+
+function createBird() {
+  const el = document.createElement('div');
+  el.className = 'bird';
+  el.innerHTML = birdSVG();
+  birdsLayer.appendChild(el);
+
+  const bird = {
+    el,
+    x: -200 - Math.random() * 800,
+    y: 60 + Math.random() * (window.innerHeight * 0.35),
+    baseY: 60 + Math.random() * (window.innerHeight * 0.35),
+    speed: 55 + Math.random() * 55,
+    scale: 0.55 + Math.random() * 0.45,
+    amplitude: 24 + Math.random() * 35,
+    phase: Math.random() * Math.PI * 2,
+    frequency: 0.0013 + Math.random() * 0.0012,
+    glideTimer: Math.random() * 1000,
+    opacity: 0.45 + Math.random() * 0.35
+  };
+
+  el.style.opacity = bird.opacity;
+
+  const flapSpeed = (0.32 + Math.random() * 0.18).toFixed(2) + 's';
+  el.querySelector('.wing-left').style.animationDuration = flapSpeed;
+  el.querySelector('.wing-right').style.animationDuration = flapSpeed;
+
+  return bird;
+}
+
+function resetBird(bird) {
+  bird.x = -180 - Math.random() * 500;
+  bird.baseY = 45 + Math.random() * (window.innerHeight * 0.38);
+  bird.speed = 55 + Math.random() * 65;
+  bird.scale = 0.55 + Math.random() * 0.50;
+  bird.amplitude = 24 + Math.random() * 38;
+  bird.phase = Math.random() * Math.PI * 2;
+  bird.frequency = 0.0013 + Math.random() * 0.0012;
+  bird.opacity = 0.45 + Math.random() * 0.35;
+
+  bird.el.style.opacity = bird.opacity;
+
+  const flapSpeed = (0.32 + Math.random() * 0.18).toFixed(2) + 's';
+  bird.el.querySelector('.wing-left').style.animationDuration = flapSpeed;
+  bird.el.querySelector('.wing-right').style.animationDuration = flapSpeed;
+}
+
+for (let i = 0; i < BIRD_COUNT; i++) {
+  birds.push(createBird());
+}
+
+let lastTime = performance.now();
+
+function animateBirds(now) {
+  const dt = (now - lastTime) / 1000;
+  lastTime = now;
+
+  birds.forEach((bird, index) => {
+    bird.x += bird.speed * dt;
+
+    const waveMain = Math.sin(now * bird.frequency + bird.phase) * bird.amplitude;
+    const waveSmall = Math.sin(now * 0.0025 + bird.phase) * 8;
+
+    bird.y = bird.baseY + waveMain + waveSmall;
+
+    const tilt = Math.sin(now * bird.frequency + bird.phase) * 12;
+    const banking = Math.sin(now * 0.0018 + bird.phase) * 7;
+
+    const scalePulse = bird.scale + Math.sin(now * 0.003 + bird.phase) * 0.025;
+
+    bird.el.style.transform = `
+      translate(${bird.x}px, ${bird.y}px)
+      rotate(${tilt + banking}deg)
+      scale(${scalePulse})
+    `;
+
+    if (bird.x > window.innerWidth + 220) {
+      resetBird(bird);
     }
+  });
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  requestAnimationFrame(animateBirds);
+}
 
-    html, body {
-      width: 100%;
-      min-height: 100%;
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      color: white;
-      background:
-        radial-gradient(circle at top center, rgba(255, 204, 0, 0.08), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(255, 204, 0, 0.05), transparent 30%),
-        linear-gradient(135deg, #020202 0%, #000000 50%, #050505 100%);
-      min-height: 100vh;
-      overflow-x: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      position: relative;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.78) 42%, rgba(0, 0, 0, 0.20) 100%);
-      z-index: -5;
-      pointer-events: none;
-    }
-
-    /* CONTENIDO */
-    .content {
-      width: 92%;
-      max-width: 470px;
-      text-align: center;
-      padding: 16px 0 28px;
-      position: relative;
-      z-index: 3;
-    }
-
-    h1 {
-      font-size: 4.4rem;
-      line-height: 1;
-      letter-spacing: 5px;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      text-shadow:
-        0 0 10px rgba(255, 204, 0, 0.60),
-        0 0 24px rgba(255, 204, 0, 0.20);
-      animation: aura 2.2s ease-in-out infinite alternate;
-    }
-
-    @keyframes aura {
-      from {
-        text-shadow:
-          0 0 10px rgba(255, 204, 0, 0.55),
-          0 0 24px rgba(255, 204, 0, 0.15);
-      }
-      to {
-        text-shadow:
-          0 0 14px rgba(255, 204, 0, 0.75),
-          0 0 32px rgba(255, 204, 0, 0.22);
-      }
-    }
-
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 6px;
-    }
-
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 17px 18px;
-      border: none;
-      border-radius: 18px;
-      text-decoration: none;
-      text-transform: uppercase;
-      font-size: 1.05rem;
-      font-weight: 900;
-      cursor: pointer;
-      color: #000;
-      position: relative;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-      box-shadow:
-        0 7px 0 rgba(125, 92, 0, 0.95),
-        0 14px 26px rgba(0, 0, 0, 0.42),
-        inset 0 2px 0 rgba(255, 255, 255, 0.55);
-      user-select: none;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px) scale(1.01);
-      filter: brightness(1.04);
-    }
-
-    .btn:active {
-      transform: translateY(4px);
-      box-shadow:
-        0 2px 0 rgba(125, 92, 0, 0.95),
-        0 8px 16px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    }
-
-    .btn-play {
-      background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 55%, #cfcfcf 100%);
-      border: 3px solid var(--gold);
-      font-size: 1.18rem;
-      color: #000;
-    }
-
-    .btn-main {
-      background: linear-gradient(180deg, #ffe45f 0%, #ffcc00 58%, #d6a800 100%);
-      color: #000;
-    }
-
-    .btn-whatsapp {
-      background: linear-gradient(180deg, #37f38e 0%, var(--green) 58%, var(--green-dark) 100%);
-      color: white;
-      padding: 13px 16px;
-      font-size: 0.92rem;
-      box-shadow:
-        0 6px 0 #0b6d32,
-        0 12px 22px rgba(0, 0, 0, 0.34),
-        inset 0 2px 0 rgba(255, 255, 255, 0.38);
-    }
-
-    .canal-wrapper {
-      margin-top: 6px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255, 204, 0, 0.35);
-      border-radius: 24px;
-      padding: 16px;
-      box-shadow:
-        0 0 0 1px rgba(255, 204, 0, 0.05),
-        0 10px 30px rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(4px);
-    }
-
-    .btn-extra {
-      background: linear-gradient(180deg, #ff4a4a 0%, #e00000 58%, #8a0000 100%);
-      color: #fff;
-      font-size: 1.55rem;
-      border: 2px solid rgba(255,255,255,0.95);
-      box-shadow:
-        0 7px 0 #610000,
-        0 14px 26px rgba(0, 0, 0, 0.42),
-        inset 0 2px 0 rgba(255, 255, 255, 0.40);
-      margin-bottom: 12px;
-    }
-
-    .canal-text {
-      color: #efefef;
-      font-size: 0.83rem;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .canal-text b {
-      color: var(--gold);
-    }
-
-    .footer-status {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .status-box {
-      background: rgba(255,255,255,0.03);
-      border: 2px solid var(--gold);
-      border-radius: 14px;
-      padding: 12px 8px;
-      color: var(--gold);
-      font-size: 0.80rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      box-shadow: 0 0 12px rgba(255, 204, 0, 0.10);
-    }
-
-    .extra-info {
-      margin-top: 16px;
-      font-size: 0.68rem;
-      color: #818181;
-      font-weight: 700;
-    }
-
-    #menu-respaldo {
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: -4px;
-      animation: openMenu 0.25s ease;
-    }
-
-    @keyframes openMenu {
-      from {
-        opacity: 0;
-        transform: translateY(-8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* PERSONAJE */
-    .character-container {
-      position: fixed;
-      right: -18px;
-      bottom: 0;
-      z-index: 1;
-      width: min(42vw, 420px);
-      pointer-events: none;
-      opacity: 0.97;
-      perspective: 1200px;
-      transform-style: preserve-3d;
-      animation: characterFloat 6s ease-in-out infinite;
-      transition: transform 0.18s ease-out;
-    }
-
-    .character-bg {
-      width: 100%;
-      display: block;
-      object-fit: contain;
-      filter:
-        drop-shadow(0 16px 28px rgba(0, 0, 0, 0.45))
-        contrast(102%)
-        brightness(100%)
-        saturate(102%);
-      transform-style: preserve-3d;
-      animation: character3D 7s ease-in-out infinite;
-    }
-
-    @keyframes characterFloat {
-      0%, 100% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-    }
-
-    @keyframes character3D {
-      0%, 100% {
-        transform: rotateY(-3deg) rotateX(1deg);
-      }
-      50% {
-        transform: rotateY(3deg) rotateX(-1deg);
-      }
-    }
-
-    /* PAJAROS REALISTAS SVG */
-    .birds {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .bird {
-      position: absolute;
-      width: 58px;
-      height: 34px;
-      opacity: 0.85;
-      filter: blur(0.1px) drop-shadow(0 0 4px rgba(255,255,255,0.10));
-    }
-
-    .bird svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    .bird .wing-left {
-      transform-origin: 46px 31px;
-      animation: flapLeft 0.7s ease-in-out infinite alternate;
-    }
-
-    .bird .wing-right {
-      transform-origin: 54px 31px;
-      animation: flapRight 0.7s ease-in-out infinite alternate;
-    }
-
-    @keyframes flapLeft {
-      0% { transform: rotate(-12deg) translateY(1px); }
-      100% { transform: rotate(18deg) translateY(-4px); }
-    }
-
-    @keyframes flapRight {
-      0% { transform: rotate(12deg) translateY(1px); }
-      100% { transform: rotate(-18deg) translateY(-4px); }
-    }
-
-    .bird-1 {
-      top: 10%;
-      left: -10%;
-      animation: flyPath1 18s linear infinite;
-    }
-
-    .bird-2 {
-      top: 18%;
-      left: -14%;
-      width: 46px;
-      height: 28px;
-      opacity: 0.68;
-      animation: flyPath2 24s linear infinite;
-      animation-delay: 3s;
-    }
-
-    .bird-3 {
-      top: 7%;
-      left: -16%;
-      width: 40px;
-      height: 24px;
-      opacity: 0.52;
-      animation: flyPath3 28s linear infinite;
-      animation-delay: 8s;
-    }
-
-    .bird-4 {
-      top: 28%;
-      left: -12%;
-      width: 50px;
-      height: 30px;
-      opacity: 0.56;
-      animation: flyPath4 22s linear infinite;
-      animation-delay: 11s;
-    }
-
-    @keyframes flyPath1 {
-      0%   { transform: translateX(0vw) translateY(0px) scale(.9); }
-      20%  { transform: translateX(22vw) translateY(-14px) scale(1); }
-      40%  { transform: translateX(44vw) translateY(8px) scale(.95); }
-      60%  { transform: translateX(66vw) translateY(-10px) scale(1.02); }
-      80%  { transform: translateX(88vw) translateY(15px) scale(.94); }
-      100% { transform: translateX(118vw) translateY(2px) scale(.9); }
-    }
-
-    @keyframes flyPath2 {
-      0%   { transform: translateX(0vw) translateY(0px) scale(.8); }
-      18%  { transform: translateX(20vw) translateY(12px) scale(.88); }
-      40%  { transform: translateX(38vw) translateY(-10px) scale(.82); }
-      62%  { transform: translateX(62vw) translateY(16px) scale(.9); }
-      84%  { transform: translateX(86vw) translateY(-12px) scale(.84); }
-      100% { transform: translateX(118vw) translateY(6px) scale(.8); }
-    }
-
-    @keyframes flyPath3 {
-      0%   { transform: translateX(0vw) translateY(0px) scale(.72); }
-      25%  { transform: translateX(24vw) translateY(-16px) scale(.78); }
-      50%  { transform: translateX(50vw) translateY(12px) scale(.74); }
-      75%  { transform: translateX(82vw) translateY(-9px) scale(.8); }
-      100% { transform: translateX(118vw) translateY(4px) scale(.72); }
-    }
-
-    @keyframes flyPath4 {
-      0%   { transform: translateX(0vw) translateY(0px) scale(.82); }
-      20%  { transform: translateX(16vw) translateY(-8px) scale(.88); }
-      45%  { transform: translateX(42vw) translateY(10px) scale(.8); }
-      70%  { transform: translateX(70vw) translateY(-14px) scale(.9); }
-      100% { transform: translateX(118vw) translateY(5px) scale(.82); }
-    }
-
-    /* FLECHA RETIROS */
-    #chat-pointer {
-      display: none;
-      position: fixed;
-      bottom: 118px;
-      right: 42px;
-      z-index: 1000;
-      text-align: center;
-      color: var(--gold);
-      animation: bounce 0.8s infinite;
-    }
-
-    #chat-pointer .pointer-label {
-      background: var(--gold);
-      color: #000;
-      padding: 7px 14px;
-      border-radius: 12px;
-      font-weight: 900;
-      font-size: 0.72rem;
-      margin-bottom: 6px;
-      box-shadow: 0 0 14px rgba(255,204,0,0.45);
-      white-space: nowrap;
-    }
-
-    @keyframes bounce {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-14px);
-      }
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .character-container {
-        width: min(45vw, 360px);
-        right: -10px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .content {
-        max-width: 430px;
-        padding-top: 14px;
-      }
-
-      h1 {
-        font-size: 3.8rem;
-        letter-spacing: 4px;
-      }
-
-      .character-container {
-        width: 72vw;
-        right: -20vw;
-        bottom: 0;
-        opacity: 0.82;
-      }
-
-      .bird {
-        opacity: 0.42;
-      }
-
-      #chat-pointer {
-        right: 26px;
-        bottom: 115px;
-      }
-    }
-
-    @media (max-width: 430px) {
-      .content {
-        width: 92%;
-        padding-top: 12px;
-      }
-
-      h1 {
-        font-size: 3.15rem;
-        letter-spacing: 3px;
-        margin-bottom: 16px;
-      }
-
-      .btn {
-        font-size: 0.96rem;
-        padding: 15px 14px;
-      }
-
-      .btn-play {
-        font-size: 1.05rem;
-      }
-
-      .btn-extra {
-        font-size: 1.28rem;
-      }
-
-      .canal-text {
-        font-size: 0.80rem;
-      }
-
-      .footer-status {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-
-      .status-box {
-        font-size: 0.72rem;
-        padding: 11px 6px;
-      }
-
-      .character-container {
-        width: 78vw;
-        right: -24vw;
-        bottom: 0;
-        opacity: 0.75;
-      }
-
-      #chat-pointer {
-        right: 18px;
-        bottom: 112px;
-      }
-
-      #chat-pointer .pointer-label {
-        font-size: 0.64rem;
-        padding: 6px 10px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- PÁJAROS -->
-  <div class="birds" aria-hidden="true">
-    <div class="bird bird-1">
-      <svg viewBox="0 0 100 60">
-        <ellipse cx="50" cy="31" rx="5" ry="3" fill="rgba(255,255,255,.80)"/>
-        <g class="wing-left">
-          <path d="M47 31 C36 18, 24 10, 8 12 C18 16, 29 23, 45 31 Z" fill="rgba(255,255,255,.88)"/>
-        </g>
-        <g class="wing-right">
-          <path d="M53 31 C64 18, 76 10, 92 12 C82 16, 71 23, 55 31 Z" fill="rgba(255,255,255,.88)"/>
-        </g>
-      </svg>
-    </div>
-
-    <div class="bird bird-2">
-      <svg viewBox="0 0 100 60">
-        <ellipse cx="50" cy="31" rx="5" ry="3" fill="rgba(255,255,255,.72)"/>
-        <g class="wing-left">
-          <path d="M47 31 C36 18, 24 10, 8 12 C18 16, 29 23, 45 31 Z" fill="rgba(255,255,255,.80)"/>
-        </g>
-        <g class="wing-right">
-          <path d="M53 31 C64 18, 76 10, 92 12 C82 16, 71 23, 55 31 Z" fill="rgba(255,255,255,.80)"/>
-        </g>
-      </svg>
-    </div>
-
-    <div class="bird bird-3">
-      <svg viewBox="0 0 100 60">
-        <ellipse cx="50" cy="31" rx="5" ry="3" fill="rgba(255,255,255,.65)"/>
-        <g class="wing-left">
-          <path d="M47 31 C36 18, 24 10, 8 12 C18 16, 29 23, 45 31 Z" fill="rgba(255,255,255,.74)"/>
-        </g>
-        <g class="wing-right">
-          <path d="M53 31 C64 18, 76 10, 92 12 C82 16, 71 23, 55 31 Z" fill="rgba(255,255,255,.74)"/>
-        </g>
-      </svg>
-    </div>
-
-    <div class="bird bird-4">
-      <svg viewBox="0 0 100 60">
-        <ellipse cx="50" cy="31" rx="5" ry="3" fill="rgba(255,255,255,.60)"/>
-        <g class="wing-left">
-          <path d="M47 31 C36 18, 24 10, 8 12 C18 16, 29 23, 45 31 Z" fill="rgba(255,255,255,.70)"/>
-        </g>
-        <g class="wing-right">
-          <path d="M53 31 C64 18, 76 10, 92 12 C82 16, 71 23, 55 31 Z" fill="rgba(255,255,255,.70)"/>
-        </g>
-      </svg>
-    </div>
-  </div>
-
-  <!-- PERSONAJE -->
-  <div class="character-container" id="personaje">
-    <img src="assets/img/personaje.png" class="character-bg" alt="Personaje Oasis">
-  </div>
-
-  <!-- CONTENIDO -->
-  <div class="content">
-    <h1>OASIS</h1>
-
-    <div class="btn-group">
-      <a href="https://greenvip.net" target="_blank" rel="noopener noreferrer" class="btn btn-play">
-        🎰 ¡Jugá ya! 🎰
-      </a>
-
-      <button onclick="toggleCargas()" class="btn btn-main">
-        💳 Cargas respaldo
-      </button>
-
-      <div id="menu-respaldo">
-        <a href="https://wa.me/5491122334455" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-          ✅ Respaldo 1
-        </a>
-        <a href="https://wa.me/5491166778899" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
-          ✅ Respaldo 2
-        </a>
-      </div>
-
-      <button onclick="abrirRetiros()" class="btn btn-main">
-        💰 Retiros
-      </button>
-
-      <div class="canal-wrapper">
-        <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" target="_blank" rel="noopener noreferrer" class="btn btn-extra">
-          30% EXTRA 💎
-        </a>
-
-        <div class="canal-text">
-          📲 Mandanos una captura mostrando que te uniste al canal y activaste la campanita 🔔<br>
-          y llevate un <b>30% EXTRA</b> en tu próxima gestión 🚀
-        </div>
-      </div>
-
-      <div class="footer-status">
-        <div class="status-box">🟢 Retiros 24hs</div>
-        <div class="status-box">🟢 Cargas 24hs</div>
-      </div>
-    </div>
-
-    <p class="extra-info">OASIS ELITE © 2026 - SOPORTE 24HS</p>
-  </div>
-
-  <!-- FLECHA PARA RETIROS -->
-  <div id="chat-pointer">
-    <div class="pointer-label">RETIRÁ AQUÍ</div>
-    <i class="fas fa-arrow-down fa-2x"></i>
-  </div>
-
-  <script>
-    function toggleCargas() {
-      const menu = document.getElementById('menu-respaldo');
-      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-    }
-
-    function abrirRetiros() {
-      if (window.callbell && typeof window.callbell.open === 'function') {
-        window.callbell.open();
-      } else {
-        let intento = setInterval(() => {
-          if (window.callbell && typeof window.callbell.open === 'function') {
-            window.callbell.open();
-            clearInterval(intento);
-          }
-        }, 500);
-
-        setTimeout(() => clearInterval(intento), 6000);
-      }
-
-      const arrow = document.getElementById('chat-pointer');
-      arrow.style.display = 'block';
-
-      setTimeout(() => {
-        arrow.style.display = 'none';
-      }, 7000);
-    }
-
-    /* Movimiento 3D suave del personaje */
-    document.addEventListener('mousemove', (e) => {
-      const personaje = document.getElementById('personaje');
-      const x = (window.innerWidth / 2 - e.clientX) / 90;
-      const y = (window.innerHeight / 2 - e.clientY) / 120;
-
-      personaje.style.transform = `
-        translateY(-4px)
-        rotateY(${x}deg)
-        rotateX(${-y}deg)
-      `;
-    });
-
-    document.addEventListener('mouseleave', () => {
-      const personaje = document.getElementById('personaje');
-      personaje.style.transform = 'translateY(0) rotateY(0deg) rotateX(0deg)';
-    });
-  </script>
-
-  <!-- CALLBELL -->
-  <script>
-    window.callbellSettings = {
-      uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
-      script_token: "GMfea5tb5E84JacftXguuZba"
-    };
-
-    (function () {
-      var w = window;
-      var d = document;
-      var l = function () {
-        var s = d.createElement('script');
-        s.async = true;
-        s.src = 'https://dash.callbell.eu/include/livechat/' + window.callbellSettings.script_token + '/' + window.callbellSettings.uuid + '.js';
-        var x = d.getElementsByTagName('script')[0];
-        x.parentNode.insertBefore(s, x);
-      };
-      w.addEventListener('load', l, false);
-    })();
-  </script>
-
-</body>
-</html>
+requestAnimationFrame(animateBirds);
