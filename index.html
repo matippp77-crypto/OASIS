@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oasis Elite</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         :root {
             --gold: #ffcc00;
             --black: #000000;
             --green: #25d366;
             --red: #ff0000;
+            --dark: #050505;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            background-color: var(--black);
+            background:
+                radial-gradient(circle at top left, rgba(255, 204, 0, 0.12), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(37, 211, 102, 0.10), transparent 30%),
+                var(--black);
             color: white;
             font-family: 'Montserrat', sans-serif;
             margin: 0;
@@ -25,26 +35,133 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* ELIMINACIÓN DE CUADRITOS */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.68) 45%, rgba(0,0,0,0.15) 100%);
+            z-index: -4;
+            pointer-events: none;
+        }
+
+        /* PERSONAJE PNG TRANSPARENTE */
         .character-container {
             position: fixed;
-            right: -20px;
-            bottom: 0;
+            right: -45px;
+            bottom: -10px;
             z-index: -1;
-            width: 85%;
-            max-width: 750px;
+            width: min(58vw, 620px);
             pointer-events: none;
-            mix-blend-mode: screen; 
-            opacity: 0.95;
+            opacity: 0.98;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            animation: characterFloat 5s ease-in-out infinite;
         }
 
         .character-bg {
             width: 100%;
-            filter: contrast(125%) brightness(85%);
-            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 95%);
-            mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 95%);
+            display: block;
+            object-fit: contain;
+            filter:
+                drop-shadow(0 0 18px rgba(255, 204, 0, 0.28))
+                drop-shadow(0 25px 40px rgba(0, 0, 0, 0.55))
+                contrast(108%)
+                brightness(103%);
+            transform-style: preserve-3d;
+            animation: character3D 6s ease-in-out infinite;
+        }
+
+        @keyframes characterFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-14px) scale(1.015);
+            }
+        }
+
+        @keyframes character3D {
+            0%, 100% {
+                transform: rotateY(-5deg) rotateX(1deg);
+            }
+            50% {
+                transform: rotateY(6deg) rotateX(-1deg);
+            }
+        }
+
+        /* PAJARITOS ANIMADOS */
+        .birds {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bird {
+            position: absolute;
+            font-size: 1.4rem;
+            opacity: 0.85;
+            filter: drop-shadow(0 0 6px rgba(255,255,255,0.25));
+            animation-name: flyAround;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .bird:nth-child(1) {
+            top: 18%;
+            left: -8%;
+            animation-duration: 16s;
+            animation-delay: 0s;
+        }
+
+        .bird:nth-child(2) {
+            top: 32%;
+            left: -12%;
+            font-size: 1.1rem;
+            animation-duration: 22s;
+            animation-delay: 4s;
+            opacity: 0.65;
+        }
+
+        .bird:nth-child(3) {
+            top: 11%;
+            left: -10%;
+            font-size: 1rem;
+            animation-duration: 26s;
+            animation-delay: 8s;
+            opacity: 0.55;
+        }
+
+        .bird:nth-child(4) {
+            top: 48%;
+            left: -15%;
+            font-size: 1.25rem;
+            animation-duration: 20s;
+            animation-delay: 11s;
+            opacity: 0.7;
+        }
+
+        @keyframes flyAround {
+            0% {
+                transform: translateX(-10vw) translateY(0) scale(0.8) rotate(0deg);
+            }
+            25% {
+                transform: translateX(28vw) translateY(-30px) scale(1) rotate(5deg);
+            }
+            50% {
+                transform: translateX(58vw) translateY(22px) scale(0.9) rotate(-4deg);
+            }
+            75% {
+                transform: translateX(82vw) translateY(-18px) scale(1) rotate(3deg);
+            }
+            100% {
+                transform: translateX(115vw) translateY(8px) scale(0.8) rotate(0deg);
+            }
         }
 
         .content {
@@ -53,9 +170,9 @@
             text-align: center;
             padding: 40px 0;
             z-index: 2;
+            position: relative;
         }
 
-        /* OASIS CON AURA */
         h1 {
             font-size: 4.5rem;
             color: var(--gold);
@@ -67,45 +184,121 @@
         }
 
         @keyframes aura {
-            from { text-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
-            to { text-shadow: 0 0 35px rgba(255, 204, 0, 0.9), 0 0 50px rgba(255, 204, 0, 0.4); }
+            from {
+                text-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+            }
+            to {
+                text-shadow:
+                    0 0 35px rgba(255, 204, 0, 0.9),
+                    0 0 50px rgba(255, 204, 0, 0.4);
+            }
         }
 
-        .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
 
         .btn {
-            background: var(--gold);
+            background: linear-gradient(180deg, #ffe36a 0%, var(--gold) 55%, #b88900 100%);
             color: black;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 15px;
             font-weight: 900;
             font-size: 1.1rem;
             border: none;
             cursor: pointer;
             text-transform: uppercase;
-            transition: 0.3s;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+            box-shadow:
+                0 7px 0 #8a6500,
+                0 14px 25px rgba(0, 0, 0, 0.45),
+                inset 0 2px 0 rgba(255, 255, 255, 0.5);
+            position: relative;
+            top: 0;
         }
 
-        .btn-play { background: #fff; border: 3px solid var(--gold); font-size: 1.3rem; }
-        .btn-whatsapp { background: var(--green); color: white; padding: 12px; font-size: 0.9rem; }
+        .btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            filter: brightness(1.08);
+        }
 
-        /* SECCIÓN CANAL REFORZADA */
-        .canal-wrapper { margin-top: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,204,0,0.2); }
-        .btn-extra { background: linear-gradient(45deg, #ff0000, #b30000); color: white; font-size: 1.5rem; border: 2px solid white; margin-bottom: 10px; }
-        .canal-text { color: white; font-size: 0.85rem; font-weight: 600; line-height: 1.4; }
-        .canal-text b { color: var(--gold); }
+        .btn:active {
+            top: 5px;
+            box-shadow:
+                0 2px 0 #8a6500,
+                0 8px 18px rgba(0, 0, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.35);
+        }
 
-        /* CUADROS 24HS INFERIORES */
-        .footer-status { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
+        .btn-play {
+            background: linear-gradient(180deg, #ffffff 0%, #f2f2f2 55%, #cfcfcf 100%);
+            border: 3px solid var(--gold);
+            font-size: 1.3rem;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(180deg, #36f28a 0%, var(--green) 60%, #128c44 100%);
+            color: white;
+            padding: 12px;
+            font-size: 0.9rem;
+            box-shadow:
+                0 6px 0 #0b6d32,
+                0 12px 22px rgba(0, 0, 0, 0.35),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .canal-wrapper {
+            margin-top: 15px;
+            background: rgba(255,255,255,0.06);
+            padding: 15px;
+            border-radius: 22px;
+            border: 1px solid rgba(255,204,0,0.25);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 25px rgba(255,204,0,0.08);
+        }
+
+        .btn-extra {
+            background: linear-gradient(180deg, #ff4444 0%, #d60000 55%, #850000 100%);
+            color: white;
+            font-size: 1.5rem;
+            border: 2px solid white;
+            margin-bottom: 10px;
+            box-shadow:
+                0 7px 0 #650000,
+                0 14px 25px rgba(0, 0, 0, 0.45),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .canal-text {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .canal-text b {
+            color: var(--gold);
+        }
+
+        .footer-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
         .status-box {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid var(--gold);
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 0.75rem;
             font-weight: 900;
             color: var(--gold);
@@ -113,9 +306,25 @@
             box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
         }
 
-        #menu-respaldo { display: none; flex-direction: column; gap: 8px; margin-top: 5px; }
+        #menu-respaldo {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 5px;
+            animation: openMenu 0.25s ease;
+        }
 
-        /* FLECHA */
+        @keyframes openMenu {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         #chat-pointer {
             display: none;
             position: fixed;
@@ -127,15 +336,96 @@
             animation: bounce 0.8s infinite;
         }
 
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        #chat-pointer div {
+            background: var(--gold);
+            color: black;
+            padding: 7px 14px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 0.72rem;
+            margin-bottom: 5px;
+            box-shadow: 0 0 15px rgba(255,204,0,0.45);
+        }
 
-        .extra-info { font-size: 0.6rem; margin-top: 30px; color: #555; }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .extra-info {
+            font-size: 0.6rem;
+            margin-top: 30px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .character-container {
+                width: 95vw;
+                right: -38vw;
+                bottom: -5px;
+                opacity: 0.45;
+            }
+
+            .content {
+                max-width: 420px;
+                padding-top: 35px;
+            }
+
+            h1 {
+                font-size: 3.8rem;
+            }
+
+            .bird {
+                opacity: 0.45;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .character-container {
+                width: 115vw;
+                right: -55vw;
+                bottom: 0;
+                opacity: 0.38;
+            }
+
+            h1 {
+                font-size: 3.2rem;
+                letter-spacing: 3px;
+            }
+
+            .btn {
+                font-size: 0.95rem;
+                padding: 15px;
+            }
+
+            .btn-extra {
+                font-size: 1.25rem;
+            }
+
+            .footer-status {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
+
 <body>
 
+    <!-- Pajaritos animados -->
+    <div class="birds">
+        <span class="bird">🕊️</span>
+        <span class="bird">🕊️</span>
+        <span class="bird">🕊️</span>
+        <span class="bird">🕊️</span>
+    </div>
+
+    <!-- Personaje: usar PNG transparente -->
     <div class="character-container" id="personaje">
-        <img src="assets/img/personaje.png" class="character-bg" alt="Oasis">
+        <img src="assets/img/personaje.png" class="character-bg" alt="Personaje Oasis">
     </div>
 
     <div class="content">
@@ -143,16 +433,16 @@
 
         <div class="btn-group">
             <a href="https://greenvip.net" class="btn btn-play">🎰 ¡JUGÁ YA! 🎰</a>
-            
+
             <button onclick="toggleCargas()" class="btn">💳 CARGAS RESPALDO</button>
+
             <div id="menu-respaldo">
                 <a href="https://wa.me/5491122334455" class="btn btn-whatsapp">✅ RESPALDO 1</a>
                 <a href="https://wa.me/5491166778899" class="btn btn-whatsapp">✅ RESPALDO 2</a>
             </div>
 
-            <button onclick="abrirRetiros()" class="btn">💰 RETIROS (CHAT)</button>
-            
-            <!-- Bloque del Canal -->
+            <button onclick="abrirRetiros()" class="btn">💰 RETIROS</button>
+
             <div class="canal-wrapper">
                 <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-extra">30% EXTRA 💎</a>
                 <div class="canal-text">
@@ -161,7 +451,6 @@
                 </div>
             </div>
 
-            <!-- Cuadros 24hs -->
             <div class="footer-status">
                 <div class="status-box">🟢 RETIROS 24HS</div>
                 <div class="status-box">🟢 CARGAS 24HS</div>
@@ -172,7 +461,7 @@
     </div>
 
     <div id="chat-pointer">
-        <div style="background:var(--gold); color:black; padding:5px 12px; border-radius:10px; font-weight:900; font-size:0.7rem; margin-bottom:5px;">RETIRÁ AQUÍ</div>
+        <div>RETIRÁ AQUÍ</div>
         <i class="fas fa-arrow-down fa-2x"></i>
     </div>
 
@@ -183,16 +472,43 @@
         }
 
         function abrirRetiros() {
-            if (window.callbell) window.callbell.open();
+            if (window.callbell && typeof window.callbell.open === 'function') {
+                window.callbell.open();
+            } else {
+                let intento = setInterval(() => {
+                    if (window.callbell && typeof window.callbell.open === 'function') {
+                        window.callbell.open();
+                        clearInterval(intento);
+                    }
+                }, 500);
+
+                setTimeout(() => clearInterval(intento), 6000);
+            }
+
             const arrow = document.getElementById('chat-pointer');
             arrow.style.display = 'block';
-            setTimeout(() => { arrow.style.display = 'none'; }, 7000);
+
+            setTimeout(() => {
+                arrow.style.display = 'none';
+            }, 7000);
         }
 
+        /* Movimiento 3D con mouse */
         document.addEventListener('mousemove', (e) => {
-            const img = document.getElementById('personaje');
-            const x = (window.innerWidth / 2 - e.pageX) / 50;
-            img.style.transform = `translateX(${x}px)`;
+            const personaje = document.getElementById('personaje');
+            const x = (window.innerWidth / 2 - e.clientX) / 45;
+            const y = (window.innerHeight / 2 - e.clientY) / 65;
+
+            personaje.style.transform = `
+                translateY(-6px)
+                rotateY(${x}deg)
+                rotateX(${-y}deg)
+            `;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            const personaje = document.getElementById('personaje');
+            personaje.style.transform = 'translateY(0) rotateY(0deg) rotateX(0deg)';
         });
     </script>
 
@@ -202,7 +518,19 @@
         uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
         script_token: "GMfea5tb5E84JacftXguuZba"
       };
-      (function(){var w=window;var d=document;var l=function(){var s=d.createElement('script');s.async=true;s.src='https://dash.callbell.eu/include/livechat/'+window.callbellSettings.script_token+'/'+window.callbellSettings.uuid+'.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};w.addEventListener('load',l,false);})();
+
+      (function(){
+        var w = window;
+        var d = document;
+        var l = function(){
+          var s = d.createElement('script');
+          s.async = true;
+          s.src = 'https://dash.callbell.eu/include/livechat/' + window.callbellSettings.script_token + '/' + window.callbellSettings.uuid + '.js';
+          var x = d.getElementsByTagName('script')[0];
+          x.parentNode.insertBefore(s,x);
+        };
+        w.addEventListener('load', l, false);
+      })();
     </script>
 
 </body>
