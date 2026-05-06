@@ -1,108 +1,758 @@
-/* AVES MÁS GRANDES CON MOVIMIENTO REALISTA */
-const birdsLayer = document.getElementById('birdsLayer');
-const birds = [];
-const BIRD_COUNT = window.innerWidth < 600 ? 3 : 5;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-function birdSVG() {
-  return `
-    <svg viewBox="0 0 120 70" aria-hidden="true">
-      <g class="wing-left">
-        <path d="M56 36 C43 7, 18 0, 4 18 C22 18, 38 27, 55 38 Z"></path>
-      </g>
+  <title>Oasis Elite</title>
 
-      <g class="wing-right">
-        <path d="M64 36 C77 7, 102 0, 116 18 C98 18, 82 27, 65 38 Z"></path>
-      </g>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-      <ellipse class="body" cx="60" cy="39" rx="13" ry="6"></ellipse>
-      <circle class="head" cx="73" cy="35" r="5"></circle>
-      <path class="beak" d="M78 35 L88 32 L80 38 Z"></path>
-      <path class="tail" d="M47 39 L30 31 L34 43 Z"></path>
-    </svg>
-  `;
-}
-
-function createBird() {
-  const el = document.createElement('div');
-  el.className = 'bird';
-  el.innerHTML = birdSVG();
-  birdsLayer.appendChild(el);
-
-  const bird = {
-    el,
-    x: -200 - Math.random() * 800,
-    y: 60 + Math.random() * (window.innerHeight * 0.35),
-    baseY: 60 + Math.random() * (window.innerHeight * 0.35),
-    speed: 55 + Math.random() * 55,
-    scale: 0.55 + Math.random() * 0.45,
-    amplitude: 24 + Math.random() * 35,
-    phase: Math.random() * Math.PI * 2,
-    frequency: 0.0013 + Math.random() * 0.0012,
-    glideTimer: Math.random() * 1000,
-    opacity: 0.45 + Math.random() * 0.35
-  };
-
-  el.style.opacity = bird.opacity;
-
-  const flapSpeed = (0.32 + Math.random() * 0.18).toFixed(2) + 's';
-  el.querySelector('.wing-left').style.animationDuration = flapSpeed;
-  el.querySelector('.wing-right').style.animationDuration = flapSpeed;
-
-  return bird;
-}
-
-function resetBird(bird) {
-  bird.x = -180 - Math.random() * 500;
-  bird.baseY = 45 + Math.random() * (window.innerHeight * 0.38);
-  bird.speed = 55 + Math.random() * 65;
-  bird.scale = 0.55 + Math.random() * 0.50;
-  bird.amplitude = 24 + Math.random() * 38;
-  bird.phase = Math.random() * Math.PI * 2;
-  bird.frequency = 0.0013 + Math.random() * 0.0012;
-  bird.opacity = 0.45 + Math.random() * 0.35;
-
-  bird.el.style.opacity = bird.opacity;
-
-  const flapSpeed = (0.32 + Math.random() * 0.18).toFixed(2) + 's';
-  bird.el.querySelector('.wing-left').style.animationDuration = flapSpeed;
-  bird.el.querySelector('.wing-right').style.animationDuration = flapSpeed;
-}
-
-for (let i = 0; i < BIRD_COUNT; i++) {
-  birds.push(createBird());
-}
-
-let lastTime = performance.now();
-
-function animateBirds(now) {
-  const dt = (now - lastTime) / 1000;
-  lastTime = now;
-
-  birds.forEach((bird, index) => {
-    bird.x += bird.speed * dt;
-
-    const waveMain = Math.sin(now * bird.frequency + bird.phase) * bird.amplitude;
-    const waveSmall = Math.sin(now * 0.0025 + bird.phase) * 8;
-
-    bird.y = bird.baseY + waveMain + waveSmall;
-
-    const tilt = Math.sin(now * bird.frequency + bird.phase) * 12;
-    const banking = Math.sin(now * 0.0018 + bird.phase) * 7;
-
-    const scalePulse = bird.scale + Math.sin(now * 0.003 + bird.phase) * 0.025;
-
-    bird.el.style.transform = `
-      translate(${bird.x}px, ${bird.y}px)
-      rotate(${tilt + banking}deg)
-      scale(${scalePulse})
-    `;
-
-    if (bird.x > window.innerWidth + 220) {
-      resetBird(bird);
+  <style>
+    :root {
+      --gold: #ffcc00;
+      --black: #000000;
+      --green: #25d366;
+      --green-dark: #128c44;
+      --red: #e00000;
+      --red-dark: #7a0000;
+      --white: #ffffff;
     }
-  });
 
-  requestAnimationFrame(animateBirds);
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-requestAnimationFrame(animateBirds);
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: white;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 204, 0, 0.06), transparent 24%),
+        radial-gradient(circle at 80% 80%, rgba(255, 204, 0, 0.04), transparent 28%),
+        linear-gradient(135deg, #020202 0%, #000000 60%, #040404 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(0,0,0,0.94) 0%,
+        rgba(0,0,0,0.84) 42%,
+        rgba(0,0,0,0.25) 100%
+      );
+      z-index: -6;
+      pointer-events: none;
+    }
+
+    /* AVES CON ALETEO, SIN JAVASCRIPT */
+    .birds-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .real-bird {
+      position: absolute;
+      width: 52px;
+      height: 32px;
+      opacity: 0.72;
+      filter:
+        drop-shadow(0 0 4px rgba(255,255,255,0.25))
+        drop-shadow(0 6px 8px rgba(0,0,0,0.35));
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    .body-bird {
+      position: absolute;
+      left: 20px;
+      top: 14px;
+      width: 16px;
+      height: 8px;
+      background: rgba(255,255,255,0.88);
+      border-radius: 50%;
+    }
+
+    .body-bird::after {
+      content: "";
+      position: absolute;
+      right: -5px;
+      top: 1px;
+      width: 7px;
+      height: 6px;
+      background: rgba(255,255,255,0.88);
+      border-radius: 50%;
+    }
+
+    .wing {
+      position: absolute;
+      top: 12px;
+      width: 28px;
+      height: 12px;
+      background: rgba(255,255,255,0.82);
+      border-radius: 100% 100% 20% 20%;
+    }
+
+    .wing.left {
+      left: 0;
+      transform-origin: right center;
+      animation: flapLeft 0.38s ease-in-out infinite alternate;
+    }
+
+    .wing.right {
+      right: 0;
+      transform-origin: left center;
+      animation: flapRight 0.38s ease-in-out infinite alternate;
+    }
+
+    @keyframes flapLeft {
+      0% {
+        transform: rotate(-34deg) translateY(4px) scaleY(1.05);
+      }
+      100% {
+        transform: rotate(34deg) translateY(-7px) scaleY(0.85);
+      }
+    }
+
+    @keyframes flapRight {
+      0% {
+        transform: rotate(34deg) translateY(4px) scaleY(1.05);
+      }
+      100% {
+        transform: rotate(-34deg) translateY(-7px) scaleY(0.85);
+      }
+    }
+
+    .bird-a {
+      top: 13%;
+      left: -90px;
+      animation: birdFlyA 12s infinite;
+    }
+
+    .bird-b {
+      top: 24%;
+      left: -120px;
+      opacity: 0.55;
+      animation: birdFlyB 17s infinite;
+      animation-delay: 3s;
+    }
+
+    .bird-c {
+      top: 8%;
+      left: -140px;
+      opacity: 0.48;
+      animation: birdFlyC 21s infinite;
+      animation-delay: 7s;
+    }
+
+    .bird-d {
+      top: 34%;
+      left: -160px;
+      opacity: 0.42;
+      animation: birdFlyD 19s infinite;
+      animation-delay: 10s;
+    }
+
+    @keyframes birdFlyA {
+      0% {
+        transform: translateX(-120px) translateY(0) scale(1.05) rotate(0deg);
+      }
+      18% {
+        transform: translateX(20vw) translateY(-22px) scale(1.12) rotate(-8deg);
+      }
+      42% {
+        transform: translateX(46vw) translateY(16px) scale(1.05) rotate(7deg);
+      }
+      70% {
+        transform: translateX(76vw) translateY(-12px) scale(1.10) rotate(-5deg);
+      }
+      100% {
+        transform: translateX(116vw) translateY(5px) scale(1.05) rotate(0deg);
+      }
+    }
+
+    @keyframes birdFlyB {
+      0% {
+        transform: translateX(-140px) translateY(0) scale(0.82) rotate(0deg);
+      }
+      25% {
+        transform: translateX(26vw) translateY(20px) scale(0.88) rotate(7deg);
+      }
+      55% {
+        transform: translateX(58vw) translateY(-18px) scale(0.84) rotate(-6deg);
+      }
+      100% {
+        transform: translateX(116vw) translateY(8px) scale(0.82) rotate(0deg);
+      }
+    }
+
+    @keyframes birdFlyC {
+      0% {
+        transform: translateX(-160px) translateY(0) scale(0.68) rotate(0deg);
+      }
+      22% {
+        transform: translateX(25vw) translateY(-16px) scale(0.74) rotate(-9deg);
+      }
+      52% {
+        transform: translateX(56vw) translateY(18px) scale(0.70) rotate(8deg);
+      }
+      100% {
+        transform: translateX(116vw) translateY(-6px) scale(0.68) rotate(0deg);
+      }
+    }
+
+    @keyframes birdFlyD {
+      0% {
+        transform: translateX(-180px) translateY(0) scale(0.76) rotate(0deg);
+      }
+      30% {
+        transform: translateX(30vw) translateY(-20px) scale(0.82) rotate(-7deg);
+      }
+      63% {
+        transform: translateX(68vw) translateY(14px) scale(0.78) rotate(6deg);
+      }
+      100% {
+        transform: translateX(116vw) translateY(2px) scale(0.76) rotate(0deg);
+      }
+    }
+
+    /* PERSONAJE */
+    .character-container {
+      position: fixed;
+      right: -12px;
+      bottom: 0;
+      z-index: 1;
+      width: min(40vw, 390px);
+      pointer-events: none;
+      opacity: 0.96;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease-out;
+      animation: characterFloat 6s ease-in-out infinite;
+    }
+
+    .character-bg {
+      width: 100%;
+      display: block;
+      object-fit: contain;
+      filter:
+        drop-shadow(0 14px 26px rgba(0, 0, 0, 0.44))
+        contrast(101%)
+        brightness(100%)
+        saturate(101%);
+      transform-style: preserve-3d;
+      animation: character3D 7s ease-in-out infinite;
+    }
+
+    @keyframes characterFloat {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-9px);
+      }
+    }
+
+    @keyframes character3D {
+      0%, 100% {
+        transform: rotateY(-2.5deg) rotateX(0.8deg);
+      }
+      50% {
+        transform: rotateY(2.5deg) rotateX(-0.8deg);
+      }
+    }
+
+    /* CONTENIDO */
+    .content {
+      width: 92%;
+      max-width: 470px;
+      text-align: center;
+      padding: 16px 0 28px;
+      position: relative;
+      z-index: 3;
+    }
+
+    h1 {
+      font-size: 4.4rem;
+      line-height: 1;
+      letter-spacing: 5px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      text-shadow:
+        0 0 10px rgba(255, 204, 0, 0.62),
+        0 0 24px rgba(255, 204, 0, 0.18);
+      animation: aura 2.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes aura {
+      from {
+        text-shadow:
+          0 0 10px rgba(255, 204, 0, 0.55),
+          0 0 24px rgba(255, 204, 0, 0.14);
+      }
+      to {
+        text-shadow:
+          0 0 14px rgba(255, 204, 0, 0.76),
+          0 0 30px rgba(255, 204, 0, 0.22);
+      }
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 17px 18px;
+      border: none;
+      border-radius: 18px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      color: #000;
+      position: relative;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      box-shadow:
+        0 7px 0 rgba(125, 92, 0, 0.96),
+        0 14px 26px rgba(0, 0, 0, 0.42),
+        inset 0 2px 0 rgba(255, 255, 255, 0.55);
+      user-select: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.01);
+      filter: brightness(1.04);
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow:
+        0 2px 0 rgba(125, 92, 0, 0.96),
+        0 8px 16px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-play {
+      background: linear-gradient(180deg, #ffffff 0%, #f3f3f3 55%, #cfcfcf 100%);
+      border: 3px solid var(--gold);
+      font-size: 1.18rem;
+      color: #000;
+    }
+
+    .btn-main {
+      background: linear-gradient(180deg, #ffe45f 0%, #ffcc00 58%, #d6a800 100%);
+      color: #000;
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(180deg, #37f38e 0%, var(--green) 58%, var(--green-dark) 100%);
+      color: white;
+      padding: 13px 16px;
+      font-size: 0.92rem;
+      box-shadow:
+        0 6px 0 #0b6d32,
+        0 12px 22px rgba(0, 0, 0, 0.34),
+        inset 0 2px 0 rgba(255, 255, 255, 0.38);
+    }
+
+    #menu-respaldo {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: -4px;
+      animation: openMenu 0.25s ease;
+    }
+
+    @keyframes openMenu {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .canal-wrapper {
+      margin-top: 6px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255, 204, 0, 0.35);
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow:
+        0 0 0 1px rgba(255, 204, 0, 0.05),
+        0 10px 30px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-extra {
+      background: linear-gradient(180deg, #ff4a4a 0%, #e00000 58%, #8a0000 100%);
+      color: #fff;
+      font-size: 1.55rem;
+      border: 2px solid rgba(255,255,255,0.95);
+      box-shadow:
+        0 7px 0 #610000,
+        0 14px 26px rgba(0, 0, 0, 0.42),
+        inset 0 2px 0 rgba(255, 255, 255, 0.40);
+      margin-bottom: 12px;
+    }
+
+    .canal-text {
+      color: #efefef;
+      font-size: 0.83rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .canal-text b {
+      color: var(--gold);
+    }
+
+    .footer-status {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .status-box {
+      background: rgba(255,255,255,0.03);
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      padding: 12px 8px;
+      color: var(--gold);
+      font-size: 0.80rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(255, 204, 0, 0.10);
+    }
+
+    .extra-info {
+      margin-top: 16px;
+      font-size: 0.68rem;
+      color: #818181;
+      font-weight: 700;
+    }
+
+    /* FLECHA RETIROS */
+    #chat-pointer {
+      display: none;
+      position: fixed;
+      bottom: 118px;
+      right: 42px;
+      z-index: 1000;
+      text-align: center;
+      color: var(--gold);
+      animation: bounce 0.8s infinite;
+    }
+
+    #chat-pointer .pointer-label {
+      background: var(--gold);
+      color: #000;
+      padding: 7px 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 0.72rem;
+      margin-bottom: 6px;
+      box-shadow: 0 0 14px rgba(255,204,0,0.45);
+      white-space: nowrap;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-14px);
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .character-container {
+        width: min(44vw, 350px);
+        right: -6px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        max-width: 430px;
+        padding-top: 14px;
+      }
+
+      h1 {
+        font-size: 3.8rem;
+        letter-spacing: 4px;
+      }
+
+      .character-container {
+        width: 72vw;
+        right: -20vw;
+        bottom: 0;
+        opacity: 0.82;
+      }
+
+      .real-bird {
+        opacity: 0.42;
+      }
+
+      #chat-pointer {
+        right: 26px;
+        bottom: 115px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .content {
+        width: 92%;
+        padding-top: 12px;
+      }
+
+      h1 {
+        font-size: 3.15rem;
+        letter-spacing: 3px;
+        margin-bottom: 16px;
+      }
+
+      .btn {
+        font-size: 0.96rem;
+        padding: 15px 14px;
+      }
+
+      .btn-play {
+        font-size: 1.05rem;
+      }
+
+      .btn-extra {
+        font-size: 1.28rem;
+      }
+
+      .canal-text {
+        font-size: 0.80rem;
+      }
+
+      .footer-status {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .status-box {
+        font-size: 0.72rem;
+        padding: 11px 6px;
+      }
+
+      .character-container {
+        width: 78vw;
+        right: -24vw;
+        bottom: 0;
+        opacity: 0.75;
+      }
+
+      .real-bird {
+        width: 42px;
+        height: 26px;
+      }
+
+      #chat-pointer {
+        right: 18px;
+        bottom: 112px;
+      }
+
+      #chat-pointer .pointer-label {
+        font-size: 0.64rem;
+        padding: 6px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- AVES ANIMADAS -->
+  <div class="birds-layer">
+    <div class="real-bird bird-a">
+      <span class="wing left"></span>
+      <span class="wing right"></span>
+      <span class="body-bird"></span>
+    </div>
+
+    <div class="real-bird bird-b">
+      <span class="wing left"></span>
+      <span class="wing right"></span>
+      <span class="body-bird"></span>
+    </div>
+
+    <div class="real-bird bird-c">
+      <span class="wing left"></span>
+      <span class="wing right"></span>
+      <span class="body-bird"></span>
+    </div>
+
+    <div class="real-bird bird-d">
+      <span class="wing left"></span>
+      <span class="wing right"></span>
+      <span class="body-bird"></span>
+    </div>
+  </div>
+
+  <!-- PERSONAJE -->
+  <div class="character-container" id="personaje">
+    <img src="assets/img/personaje.png" class="character-bg" alt="Personaje Oasis">
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="content">
+    <h1>OASIS</h1>
+
+    <div class="btn-group">
+
+      <a href="https://greenvip.net" target="_blank" rel="noopener noreferrer" class="btn btn-play">
+        🎰 ¡Jugá ya! 🎰
+      </a>
+
+      <button onclick="toggleCargas()" class="btn btn-main">
+        💳 Cargas respaldo
+      </button>
+
+      <div id="menu-respaldo">
+        <a href="https://wa.me/5491122334455" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+          ✅ Respaldo 1
+        </a>
+
+        <a href="https://wa.me/5491166778899" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+          ✅ Respaldo 2
+        </a>
+      </div>
+
+      <button onclick="abrirRetiros()" class="btn btn-main">
+        💰 Retiros
+      </button>
+
+      <div class="canal-wrapper">
+        <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" target="_blank" rel="noopener noreferrer" class="btn btn-extra">
+          30% EXTRA 💎
+        </a>
+
+        <div class="canal-text">
+          📲 Mandanos una captura mostrando que te uniste al canal y activaste la campanita 🔔<br>
+          y llevate un <b>30% EXTRA</b> en tu próxima gestión 🚀
+        </div>
+      </div>
+
+      <div class="footer-status">
+        <div class="status-box">🟢 Retiros 24hs</div>
+        <div class="status-box">🟢 Cargas 24hs</div>
+      </div>
+
+    </div>
+
+    <p class="extra-info">OASIS ELITE © 2026 - SOPORTE 24HS</p>
+  </div>
+
+  <!-- FLECHA PARA RETIROS -->
+  <div id="chat-pointer">
+    <div class="pointer-label">RETIRÁ AQUÍ</div>
+    <i class="fas fa-arrow-down fa-2x"></i>
+  </div>
+
+  <script>
+    function toggleCargas() {
+      const menu = document.getElementById('menu-respaldo');
+      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function abrirRetiros() {
+      if (window.callbell && typeof window.callbell.open === 'function') {
+        window.callbell.open();
+      } else {
+        let intento = setInterval(() => {
+          if (window.callbell && typeof window.callbell.open === 'function') {
+            window.callbell.open();
+            clearInterval(intento);
+          }
+        }, 500);
+
+        setTimeout(() => clearInterval(intento), 6000);
+      }
+
+      const arrow = document.getElementById('chat-pointer');
+      arrow.style.display = 'block';
+
+      setTimeout(() => {
+        arrow.style.display = 'none';
+      }, 7000);
+    }
+
+    /* Movimiento 3D suave del personaje */
+    document.addEventListener('mousemove', (e) => {
+      const personaje = document.getElementById('personaje');
+      const x = (window.innerWidth / 2 - e.clientX) / 90;
+      const y = (window.innerHeight / 2 - e.clientY) / 120;
+
+      personaje.style.transform = `
+        translateY(-4px)
+        rotateY(${x}deg)
+        rotateX(${-y}deg)
+      `;
+    });
+
+    document.addEventListener('mouseleave', () => {
+      const personaje = document.getElementById('personaje');
+      personaje.style.transform = 'translateY(0) rotateY(0deg) rotateX(0deg)';
+    });
+  </script>
+
+  <!-- CALLBELL -->
+  <script>
+    window.callbellSettings = {
+      uuid: "7980a6c9-f027-4666-82a7-4258788e21dd",
+      script_token: "GMfea5tb5E84JacftXguuZba"
+    };
+
+    (function () {
+      var w = window;
+      var d = document;
+      var l = function () {
+        var s = d.createElement('script');
+        s.async = true;
+        s.src = 'https://dash.callbell.eu/include/livechat/' + window.callbellSettings.script_token + '/' + window.callbellSettings.uuid + '.js';
+        var x = d.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+      };
+      w.addEventListener('load', l, false);
+    })();
+  </script>
+
+</body>
+</html>
