@@ -26,55 +26,56 @@
             overflow-x: hidden;
         }
 
-        /* ELIMINACIÓN DE CUADRITOS Y EFECTO 3D */
+        /* ELIMINACIÓN DE CUADRITOS Y MEZCLA */
         .character-container {
             position: fixed;
-            right: -50px;
+            right: -20px;
             bottom: 0;
             z-index: -1;
             width: 85%;
             max-width: 750px;
             pointer-events: none;
-            transition: transform 0.1s ease-out;
+            mix-blend-mode: screen; 
+            opacity: 0.95;
         }
 
         .character-bg {
             width: 100%;
-            /* Filtro para fundir los cuadros con el negro */
-            filter: brightness(0.8) contrast(1.2);
-            -webkit-mask-image: radial-gradient(circle at 60% 50%, black 20%, transparent 80%);
-            mask-image: radial-gradient(circle at 60% 50%, black 20%, transparent 80%);
+            filter: contrast(120%) brightness(90%);
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 95%);
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 95%);
         }
 
         .content {
             width: 90%;
             max-width: 450px;
             text-align: center;
-            padding-top: 20px;
+            padding-top: 50px;
             z-index: 2;
         }
 
+        /* OASIS CON AURA LLAMATIVA */
         h1 {
-            font-size: 3rem;
+            font-size: 4.5rem;
             color: var(--gold);
             text-transform: uppercase;
-            margin: 10px 0 0 0;
-            letter-spacing: 2px;
+            margin: 0;
+            padding: 0;
+            letter-spacing: 5px;
+            /* Efecto Aura / Glow */
+            text-shadow: 
+                0 0 10px rgba(255, 204, 0, 0.8),
+                0 0 30px rgba(255, 204, 0, 0.6),
+                0 0 60px rgba(255, 204, 0, 0.4);
+            animation: aura-glow 2s ease-in-out infinite alternate;
         }
 
-        .promo-tag {
-            background: linear-gradient(90deg, #ff0000, #990000);
-            color: white;
-            padding: 8px 25px;
-            border-radius: 50px;
-            font-weight: 900;
-            display: inline-block;
-            margin-bottom: 20px;
-            font-size: 0.8rem;
-            border: 2px solid var(--gold);
+        @keyframes aura-glow {
+            from { text-shadow: 0 0 10px rgba(255, 204, 0, 0.8), 0 0 30px rgba(255, 204, 0, 0.4); }
+            to { text-shadow: 0 0 20px rgba(255, 204, 0, 1), 0 0 50px rgba(255, 204, 0, 0.8), 0 0 80px rgba(255, 204, 0, 0.6); }
         }
 
-        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
 
         .btn {
             background: var(--gold);
@@ -90,42 +91,48 @@
             border: none;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
             transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .btn-play { background: #fff; border: 4px solid var(--gold); font-size: 1.3rem; }
-        .btn-green { background: var(--green); color: white; margin-top: 5px; }
+        
+        .btn-whatsapp { background: var(--green); color: white; padding: 15px; margin-top: 5px; }
 
-        .label-respaldo {
-            margin: 20px 0 10px 0;
-            font-weight: 900;
+        /* SECCIÓN CANAL REESTRUCTURADA */
+        .canal-container { margin-top: 10px; }
+        .btn-canal {
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            color: white;
+            font-size: 1.4rem;
+            border: 2px solid white;
+        }
+        .canal-subtext {
             color: var(--gold);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-top: 8px;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px black;
         }
 
-        /* FLECHA INDICADORA */
-        #retiros-arrow {
+        #menu-respaldo { display: none; flex-direction: column; gap: 8px; margin-top: 5px; }
+
+        /* FLECHA CHAT */
+        #chat-pointer {
             display: none;
             position: fixed;
             bottom: 110px;
             right: 40px;
-            color: var(--gold);
+            z-index: 999;
             text-align: center;
-            z-index: 1000;
-            animation: bounce 1s infinite;
+            color: var(--gold);
+            animation: jump 0.8s infinite;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+        @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* MENÚ OCULTO DE RESPALDO */
-        #menu-respaldo { display: none; margin-top: 10px; }
-
-        .extra-info { font-size: 0.6rem; margin-top: 30px; color: #444; letter-spacing: 1px; }
-
+        .extra-info { font-size: 0.6rem; margin-top: 40px; color: #555; }
     </style>
 </head>
 <body>
@@ -136,54 +143,52 @@
 
     <div class="content">
         <h1>OASIS</h1>
-        <div class="promo-tag">🔥 EXTRA 30% DE REGALO 🔥</div>
 
         <div class="btn-group">
             <a href="https://greenvip.net" class="btn btn-play">🎰 ¡JUGÁ YA! 🎰</a>
             
-            <!-- Botón que despliega los WhatsApp -->
-            <button onclick="toggleRespaldo()" class="btn">💳 CARGAS RESPALDO</button>
-            
+            <button onclick="toggleCargas()" class="btn">💳 CARGAS RESPALDO</button>
             <div id="menu-respaldo">
-                <a href="https://wa.me/5491122334455" class="btn btn-green">✅ CARGAS RESPALDO 1</a>
-                <a href="https://wa.me/5491166778899" class="btn btn-green" style="margin-top:10px;">✅ CARGAS RESPALDO 2</a>
+                <a href="https://wa.me/5491122334455" class="btn btn-whatsapp">✅ CARGAS RESPALDO 1</a>
+                <a href="https://wa.me/5491166778899" class="btn btn-whatsapp">✅ CARGAS RESPALDO 2</a>
             </div>
 
-            <button onclick="activarRetiros()" class="btn">💰 RETIROS (CHAT)</button>
+            <button onclick="abrirRetiros()" class="btn">💰 RETIROS (CHAT)</button>
             
-            <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn">📢 UNITE AL CANAL</a>
+            <!-- Sección Canal con 30% Extra -->
+            <div class="canal-container">
+                <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn btn-canal">📢 SOLO 30% EXTRA</a>
+                <div class="canal-subtext">
+                    unite al canal y activa la campanita <br> y llevate 30% mas 💎🎰
+                </div>
+            </div>
         </div>
 
         <p class="extra-info">OASIS ELITE © 2026 - SOPORTE 24HS</p>
     </div>
 
-    <!-- Flecha indicadora de Chat -->
-    <div id="retiros-arrow">
-        <div style="background: var(--gold); color:black; padding: 5px 10px; border-radius: 10px; font-weight:900; margin-bottom:10px;">TOCÁ EL CHAT AQUÍ</div>
-        <i class="fas fa-arrow-down fa-3x"></i>
+    <div id="chat-pointer">
+        <div style="background:var(--gold); color:black; padding:5px 10px; border-radius:10px; font-weight:900; font-size:0.7rem; margin-bottom:5px;">CHAT DE RETIROS</div>
+        <i class="fas fa-arrow-down fa-2x"></i>
     </div>
 
     <script>
-        // Función para mostrar los números de respaldo
-        function toggleRespaldo() {
+        function toggleCargas() {
             const menu = document.getElementById('menu-respaldo');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Función para retiros y flecha
-        function activarRetiros() {
+        function abrirRetiros() {
             if (window.callbell) window.callbell.open();
-            const arrow = document.getElementById('retiros-arrow');
-            arrow.style.display = 'block';
-            setTimeout(() => { arrow.style.display = 'none'; }, 6000);
+            const p = document.getElementById('chat-pointer');
+            p.style.display = 'block';
+            setTimeout(() => { p.style.display = 'none'; }, 6000);
         }
 
-        // Movimiento 3D
         document.addEventListener('mousemove', (e) => {
             const img = document.getElementById('personaje');
-            const x = (window.innerWidth / 2 - e.pageX) / 50;
-            const y = (window.innerHeight / 2 - e.pageY) / 50;
-            img.style.transform = `translateX(${x}px) translateY(${y}px) rotateY(${x}deg)`;
+            const x = (window.innerWidth / 2 - e.pageX) / 45;
+            img.style.transform = `translateX(${x}px) rotateY(${x/2}deg)`;
         });
     </script>
 
