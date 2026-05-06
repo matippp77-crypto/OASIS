@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oasis - Plataforma Oficial</title>
+    <title>Oasis Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --gold: #ffcc00;
             --black: #000000;
+            --green: #25d366;
         }
 
         body {
@@ -22,62 +24,54 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
-            perspective: 1200px;
         }
 
-        /* CONTENEDOR PARA ELIMINAR CUADRADOS */
+        /* ELIMINACIÓN DE CUADRITOS Y EFECTO 3D */
         .character-container {
             position: fixed;
-            right: -20px;
+            right: -50px;
             bottom: 0;
             z-index: -1;
-            width: 90%;
+            width: 85%;
             max-width: 750px;
             pointer-events: none;
             transition: transform 0.1s ease-out;
-            /* Máscara radial para ocultar bordes con cuadros */
-            -webkit-mask-image: radial-gradient(circle at center right, black 30%, transparent 85%);
-            mask-image: radial-gradient(circle at center right, black 30%, transparent 85%);
         }
 
         .character-bg {
             width: 100%;
-            /* Filtros para que el negro de los cuadros se vuelva invisible contra el fondo */
-            filter: brightness(1.1) contrast(1.2) drop-shadow(0 0 30px rgba(255,204,0,0.2));
+            /* Filtro para fundir los cuadros con el negro */
+            filter: brightness(0.8) contrast(1.2);
+            -webkit-mask-image: radial-gradient(circle at 60% 50%, black 20%, transparent 80%);
+            mask-image: radial-gradient(circle at 60% 50%, black 20%, transparent 80%);
         }
 
         .content {
             width: 90%;
             max-width: 450px;
             text-align: center;
-            padding-top: 30px;
+            padding-top: 20px;
             z-index: 2;
         }
 
         h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             color: var(--gold);
             text-transform: uppercase;
-            margin-bottom: 0;
-            text-shadow: 0 0 20px rgba(0,0,0,1);
+            margin: 10px 0 0 0;
+            letter-spacing: 2px;
         }
 
         .promo-tag {
-            background: #ff0000;
+            background: linear-gradient(90deg, #ff0000, #990000);
             color: white;
-            padding: 6px 20px;
+            padding: 8px 25px;
             border-radius: 50px;
             font-weight: 900;
             display: inline-block;
-            margin-bottom: 25px;
-            font-size: 0.9rem;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255,0,0,0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            border: 2px solid var(--gold);
         }
 
         .btn-group { display: flex; flex-direction: column; gap: 12px; }
@@ -90,43 +84,53 @@
             align-items: center;
             justify-content: center;
             padding: 18px;
-            border-radius: 14px;
+            border-radius: 15px;
             font-weight: 900;
             font-size: 1.1rem;
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
             transition: 0.3s;
-            text-transform: uppercase;
         }
 
-        .btn-play {
-            background: #fff;
-            border: 3px solid var(--gold);
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-        }
+        .btn-play { background: #fff; border: 4px solid var(--gold); font-size: 1.3rem; }
+        .btn-green { background: var(--green); color: white; margin-top: 5px; }
 
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 204, 0, 0.5); }
-
-        .btn-whatsapp { background: #25d366; color: white; font-size: 1rem; padding: 14px; }
-        
         .label-respaldo {
-            margin-top: 20px;
-            font-weight: bold;
+            margin: 20px 0 10px 0;
+            font-weight: 900;
             color: var(--gold);
-            font-size: 0.85rem;
-            text-transform: uppercase;
+            font-size: 0.9rem;
         }
 
-        .extra-info { font-size: 0.7rem; margin-top: 30px; color: #444; }
+        /* FLECHA INDICADORA */
+        #retiros-arrow {
+            display: none;
+            position: fixed;
+            bottom: 110px;
+            right: 40px;
+            color: var(--gold);
+            text-align: center;
+            z-index: 1000;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* MENÚ OCULTO DE RESPALDO */
+        #menu-respaldo { display: none; margin-top: 10px; }
+
+        .extra-info { font-size: 0.6rem; margin-top: 30px; color: #444; letter-spacing: 1px; }
 
     </style>
 </head>
 <body>
 
     <div class="character-container" id="personaje">
-        <!-- Se usa la imagen que subiste: personaje.png -->
         <img src="assets/img/personaje.png" class="character-bg" alt="Oasis">
     </div>
 
@@ -136,31 +140,50 @@
 
         <div class="btn-group">
             <a href="https://greenvip.net" class="btn btn-play">🎰 ¡JUGÁ YA! 🎰</a>
-            <a href="https://greenvip.net" class="btn">💳 CARGAS ONLINE</a>
-            <button onclick="window.callbell.open()" class="btn">💰 RETIROS (CHAT)</button>
-            <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn">📢 UNITE AL CANAL</a>
             
-            <p class="label-respaldo">NÚMEROS DE CARGA DE RESPALDO:</p>
-            <a href="https://wa.me/5491122334455" class="btn btn-whatsapp">✅ CARGAS RESPALDO 1</a>
-            <a href="https://wa.me/5491166778899" class="btn btn-whatsapp">✅ CARGAS RESPALDO 2</a>
+            <!-- Botón que despliega los WhatsApp -->
+            <button onclick="toggleRespaldo()" class="btn">💳 CARGAS RESPALDO</button>
+            
+            <div id="menu-respaldo">
+                <a href="https://wa.me/5491122334455" class="btn btn-green">✅ CARGAS RESPALDO 1</a>
+                <a href="https://wa.me/5491166778899" class="btn btn-green" style="margin-top:10px;">✅ CARGAS RESPALDO 2</a>
+            </div>
+
+            <button onclick="activarRetiros()" class="btn">💰 RETIROS (CHAT)</button>
+            
+            <a href="https://whatsapp.com/channel/0029Vb7TNUXJP20yPDX5Ga1p" class="btn">📢 UNITE AL CANAL</a>
         </div>
 
         <p class="extra-info">OASIS ELITE © 2026 - SOPORTE 24HS</p>
     </div>
 
-    <!-- SCRIPT MOVIMIENTO 3D -->
+    <!-- Flecha indicadora de Chat -->
+    <div id="retiros-arrow">
+        <div style="background: var(--gold); color:black; padding: 5px 10px; border-radius: 10px; font-weight:900; margin-bottom:10px;">TOCÁ EL CHAT AQUÍ</div>
+        <i class="fas fa-arrow-down fa-3x"></i>
+    </div>
+
     <script>
+        // Función para mostrar los números de respaldo
+        function toggleRespaldo() {
+            const menu = document.getElementById('menu-respaldo');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Función para retiros y flecha
+        function activarRetiros() {
+            if (window.callbell) window.callbell.open();
+            const arrow = document.getElementById('retiros-arrow');
+            arrow.style.display = 'block';
+            setTimeout(() => { arrow.style.display = 'none'; }, 6000);
+        }
+
+        // Movimiento 3D
         document.addEventListener('mousemove', (e) => {
             const img = document.getElementById('personaje');
-            const x = (window.innerWidth / 2 - e.pageX) / 40;
-            const y = (window.innerHeight / 2 - e.pageY) / 40;
-            // Movimiento 3D que oculta los bordes rotando la imagen
-            img.style.transform = `translateX(${x}px) translateY(${y}px) rotateY(${x/1.2}deg) rotateX(${-y/1.2}deg)`;
-        });
-        
-        window.addEventListener('deviceorientation', (e) => {
-            const img = document.getElementById('personaje');
-            img.style.transform = `rotateY(${e.gamma / 2}deg) rotateX(${e.beta / 2}deg)`;
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            img.style.transform = `translateX(${x}px) translateY(${y}px) rotateY(${x}deg)`;
         });
     </script>
 
