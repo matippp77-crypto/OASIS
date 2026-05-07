@@ -2,9 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-
-  <!-- IMPORTANTE: esto hace que en celular se vea como PC -->
-  <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Oasis Elite</title>
 
@@ -16,7 +14,6 @@
       --gold: #ffcc00;
       --green: #25d366;
       --green-dark: #128c44;
-      --red: #e00000;
     }
 
     * {
@@ -34,79 +31,61 @@
 
     body {
       font-family: 'Montserrat', sans-serif;
-      background: #000;
       color: white;
-    }
-
-    .site-stage {
-      width: 1000px;
-      min-height: 870px;
-      position: relative;
-      overflow: hidden;
-      margin: 0 auto;
-
+      min-height: 100svh;
       background-image:
         linear-gradient(
           90deg,
-          rgba(0,0,0,0.88) 0%,
-          rgba(0,0,0,0.72) 42%,
-          rgba(0,0,0,0.34) 100%
+          rgba(0,0,0,0.94) 0%,
+          rgba(0,0,0,0.78) 45%,
+          rgba(0,0,0,0.42) 100%
         ),
         url("assets/img/fondo-oasis.png");
-
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
+      background-attachment: fixed;
+      position: relative;
     }
 
-    .site-stage::before {
+    body::before {
       content: "";
-      position: absolute;
+      position: fixed;
       inset: 0;
-      background:
-        radial-gradient(circle at 34% 8%, rgba(255,204,0,0.15), transparent 22%),
-        radial-gradient(circle at 88% 73%, rgba(37,211,102,0.08), transparent 28%),
-        rgba(0,0,0,0.08);
+      background: rgba(0,0,0,0.18);
       z-index: 0;
       pointer-events: none;
     }
 
+    .page {
+      width: 100%;
+      min-height: 100svh;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 14px 0 24px 8vw;
+    }
+
     .content {
-      width: 470px;
+      width: min(470px, 92vw);
       text-align: center;
       position: relative;
       z-index: 5;
-      padding-top: 8px;
-      margin-left: 126px;
     }
 
     h1 {
-      font-size: 72px;
+      font-size: clamp(3.1rem, 6vw, 4.6rem);
       line-height: 1;
-      letter-spacing: 6px;
+      letter-spacing: clamp(3px, 0.6vw, 6px);
       color: var(--gold);
       text-transform: uppercase;
       margin-bottom: 22px;
       text-shadow:
-        0 0 12px rgba(255, 204, 0, 0.82),
-        0 0 32px rgba(255, 204, 0, 0.34),
-        0 8px 20px rgba(0, 0, 0, 0.95);
-      animation: titleGlow 2.3s ease-in-out infinite alternate;
-    }
-
-    @keyframes titleGlow {
-      from {
-        text-shadow:
-          0 0 10px rgba(255, 204, 0, 0.62),
-          0 0 24px rgba(255, 204, 0, 0.22),
-          0 8px 20px rgba(0, 0, 0, 0.95);
-      }
-      to {
-        text-shadow:
-          0 0 18px rgba(255, 204, 0, 0.95),
-          0 0 38px rgba(255, 204, 0, 0.38),
-          0 8px 22px rgba(0, 0, 0, 1);
-      }
+        0 0 12px rgba(255,204,0,0.85),
+        0 0 34px rgba(255,204,0,0.32),
+        0 6px 20px rgba(0,0,0,0.95);
     }
 
     .btn-group {
@@ -117,13 +96,13 @@
 
     .btn {
       width: 100%;
-      min-height: 62px;
+      min-height: 60px;
       padding: 14px 18px;
       border: none;
       border-radius: 18px;
       text-decoration: none;
       text-transform: uppercase;
-      font-size: 19px;
+      font-size: 1.05rem;
       font-weight: 900;
       cursor: pointer;
       color: #000;
@@ -156,7 +135,7 @@
     .btn-play {
       background: linear-gradient(180deg, #ffffff 0%, #f3f3f3 55%, #cfcfcf 100%);
       border: 3px solid var(--gold);
-      font-size: 20px;
+      font-size: 1.15rem;
     }
 
     .btn-main {
@@ -167,7 +146,7 @@
       background: linear-gradient(180deg, #37f38e 0%, var(--green) 58%, var(--green-dark) 100%);
       color: white;
       min-height: 50px;
-      font-size: 15px;
+      font-size: 0.92rem;
       box-shadow:
         0 6px 0 #0b6d32,
         0 12px 22px rgba(0, 0, 0, 0.36),
@@ -196,30 +175,30 @@
     .canal-wrapper {
       margin-top: 4px;
       background: rgba(0,0,0,0.54);
-      border: 1px solid rgba(255, 204, 0, 0.48);
+      border: 1px solid rgba(255,204,0,0.48);
       border-radius: 26px;
       padding: 17px;
       box-shadow:
-        0 0 0 1px rgba(255, 204, 0, 0.07),
-        0 14px 38px rgba(0, 0, 0, 0.62);
+        0 0 0 1px rgba(255,204,0,0.07),
+        0 14px 38px rgba(0,0,0,0.62);
       backdrop-filter: blur(6px);
     }
 
     .btn-extra {
       background: linear-gradient(180deg, #ff4a4a 0%, #e00000 58%, #8a0000 100%);
       color: #fff;
-      font-size: 26px;
+      font-size: 1.55rem;
       border: 2px solid rgba(255,255,255,0.95);
       margin-bottom: 12px;
       box-shadow:
         0 7px 0 #610000,
-        0 14px 26px rgba(0, 0, 0, 0.46),
-        inset 0 2px 0 rgba(255, 255, 255, 0.42);
+        0 14px 26px rgba(0,0,0,0.46),
+        inset 0 2px 0 rgba(255,255,255,0.42);
     }
 
     .canal-text {
       color: #f2f2f2;
-      font-size: 14px;
+      font-size: 0.84rem;
       font-weight: 700;
       line-height: 1.45;
       text-shadow: 0 2px 5px rgba(0,0,0,0.90);
@@ -242,29 +221,29 @@
       border-radius: 14px;
       padding: 12px 8px;
       color: var(--gold);
-      font-size: 13px;
+      font-size: 0.80rem;
       font-weight: 900;
       text-transform: uppercase;
       box-shadow:
-        0 0 12px rgba(255, 204, 0, 0.18),
+        0 0 12px rgba(255,204,0,0.18),
         0 8px 18px rgba(0,0,0,0.44);
       text-shadow: 0 2px 4px rgba(0,0,0,0.85);
     }
 
     .extra-info {
       margin-top: 16px;
-      font-size: 11px;
+      font-size: 0.68rem;
       color: rgba(255,255,255,0.58);
       font-weight: 700;
       text-shadow: 0 2px 4px rgba(0,0,0,0.85);
     }
 
     .character-container {
-      position: absolute;
-      right: 58px;
-      bottom: 58px;
-      z-index: 4;
-      width: 205px;
+      position: fixed;
+      right: 7vw;
+      bottom: 52px;
+      z-index: 3;
+      width: clamp(180px, 22vw, 245px);
       pointer-events: none;
       opacity: 0.98;
       perspective: 1200px;
@@ -278,11 +257,10 @@
       display: block;
       object-fit: contain;
       filter:
-        drop-shadow(0 18px 34px rgba(0, 0, 0, 0.72))
+        drop-shadow(0 18px 34px rgba(0,0,0,0.72))
         contrast(101%)
         brightness(100%)
         saturate(101%);
-      transform-style: preserve-3d;
       animation: character3D 7s ease-in-out infinite;
     }
 
@@ -305,18 +283,18 @@
     }
 
     .birds-layer {
-      position: absolute;
+      position: fixed;
       inset: 0;
-      z-index: 2;
+      z-index: 1;
       pointer-events: none;
       overflow: hidden;
     }
 
     .real-bird {
       position: absolute;
-      width: 52px;
-      height: 32px;
-      opacity: 0.48;
+      width: 48px;
+      height: 30px;
+      opacity: 0.38;
       filter:
         drop-shadow(0 0 4px rgba(255,255,255,0.20))
         drop-shadow(0 6px 8px rgba(0,0,0,0.35));
@@ -385,15 +363,15 @@
     }
 
     .bird-a {
-      top: 11%;
+      top: 12%;
       left: -90px;
       animation: birdFlyA 12s infinite;
     }
 
     .bird-b {
-      top: 23%;
+      top: 24%;
       left: -120px;
-      opacity: 0.36;
+      opacity: 0.30;
       animation: birdFlyB 17s infinite;
       animation-delay: 3s;
     }
@@ -401,31 +379,20 @@
     .bird-c {
       top: 8%;
       left: -140px;
-      opacity: 0.30;
+      opacity: 0.25;
       animation: birdFlyC 21s infinite;
       animation-delay: 7s;
-    }
-
-    .bird-d {
-      top: 34%;
-      left: -160px;
-      opacity: 0.26;
-      animation: birdFlyD 19s infinite;
-      animation-delay: 10s;
     }
 
     @keyframes birdFlyA {
       0% {
         transform: translateX(-120px) translateY(0) scale(1.05) rotate(0deg);
       }
-      18% {
-        transform: translateX(20vw) translateY(-22px) scale(1.12) rotate(-8deg);
-      }
-      42% {
-        transform: translateX(46vw) translateY(16px) scale(1.05) rotate(7deg);
+      35% {
+        transform: translateX(36vw) translateY(-18px) scale(1.12) rotate(-8deg);
       }
       70% {
-        transform: translateX(76vw) translateY(-12px) scale(1.10) rotate(-5deg);
+        transform: translateX(76vw) translateY(14px) scale(1.05) rotate(7deg);
       }
       100% {
         transform: translateX(116vw) translateY(5px) scale(1.05) rotate(0deg);
@@ -436,10 +403,7 @@
       0% {
         transform: translateX(-140px) translateY(0) scale(0.82) rotate(0deg);
       }
-      25% {
-        transform: translateX(26vw) translateY(20px) scale(0.88) rotate(7deg);
-      }
-      55% {
+      50% {
         transform: translateX(58vw) translateY(-18px) scale(0.84) rotate(-6deg);
       }
       100% {
@@ -451,29 +415,11 @@
       0% {
         transform: translateX(-160px) translateY(0) scale(0.68) rotate(0deg);
       }
-      22% {
-        transform: translateX(25vw) translateY(-16px) scale(0.74) rotate(-9deg);
-      }
       52% {
         transform: translateX(56vw) translateY(18px) scale(0.70) rotate(8deg);
       }
       100% {
         transform: translateX(116vw) translateY(-6px) scale(0.68) rotate(0deg);
-      }
-    }
-
-    @keyframes birdFlyD {
-      0% {
-        transform: translateX(-180px) translateY(0) scale(0.76) rotate(0deg);
-      }
-      30% {
-        transform: translateX(30vw) translateY(-20px) scale(0.82) rotate(-7deg);
-      }
-      63% {
-        transform: translateX(68vw) translateY(14px) scale(0.78) rotate(6deg);
-      }
-      100% {
-        transform: translateX(116vw) translateY(2px) scale(0.76) rotate(0deg);
       }
     }
 
@@ -494,7 +440,7 @@
       padding: 7px 14px;
       border-radius: 12px;
       font-weight: 900;
-      font-size: 12px;
+      font-size: 0.72rem;
       margin-bottom: 6px;
       box-shadow: 0 0 14px rgba(255,204,0,0.45);
       white-space: nowrap;
@@ -508,43 +454,152 @@
         transform: translateY(-14px);
       }
     }
+
+    /* TABLET */
+    @media (max-width: 1024px) {
+      .page {
+        padding-left: 5vw;
+      }
+
+      .content {
+        width: min(470px, 58vw);
+      }
+
+      .character-container {
+        right: 4vw;
+        width: clamp(170px, 24vw, 230px);
+      }
+    }
+
+    /* CELULAR */
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+        background-position: center center;
+      }
+
+      .page {
+        justify-content: center;
+        padding: 12px 10px 24px;
+      }
+
+      .content {
+        width: min(94vw, 430px);
+      }
+
+      h1 {
+        font-size: clamp(2.9rem, 14vw, 4rem);
+        margin-bottom: 18px;
+      }
+
+      .btn-group {
+        gap: 12px;
+      }
+
+      .btn {
+        min-height: 54px;
+        font-size: 0.95rem;
+        border-radius: 16px;
+      }
+
+      .btn-play {
+        font-size: 1rem;
+      }
+
+      .btn-extra {
+        font-size: 1.30rem;
+      }
+
+      .canal-wrapper {
+        padding: 14px;
+        background: rgba(0,0,0,0.60);
+      }
+
+      .canal-text {
+        font-size: 0.78rem;
+      }
+
+      .status-box {
+        font-size: 0.70rem;
+        padding: 10px 6px;
+      }
+
+      .character-container {
+        right: -72px;
+        bottom: 50px;
+        width: 190px;
+        opacity: 0.58;
+        z-index: 2;
+      }
+
+      .birds-layer {
+        display: none;
+      }
+
+      #chat-pointer {
+        right: 22px;
+        bottom: 110px;
+      }
+    }
+
+    /* CELULAR MUY ANGOSTO */
+    @media (max-width: 380px) {
+      h1 {
+        font-size: 3rem;
+      }
+
+      .btn {
+        min-height: 51px;
+        font-size: 0.86rem;
+      }
+
+      .btn-extra {
+        font-size: 1.15rem;
+      }
+
+      .canal-text {
+        font-size: 0.72rem;
+      }
+
+      .status-box {
+        font-size: 0.64rem;
+      }
+
+      .character-container {
+        width: 170px;
+        right: -76px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <div class="site-stage">
-
-    <div class="birds-layer">
-      <div class="real-bird bird-a">
-        <span class="wing left"></span>
-        <span class="wing right"></span>
-        <span class="body-bird"></span>
-      </div>
-
-      <div class="real-bird bird-b">
-        <span class="wing left"></span>
-        <span class="wing right"></span>
-        <span class="body-bird"></span>
-      </div>
-
-      <div class="real-bird bird-c">
-        <span class="wing left"></span>
-        <span class="wing right"></span>
-        <span class="body-bird"></span>
-      </div>
-
-      <div class="real-bird bird-d">
-        <span class="wing left"></span>
-        <span class="wing right"></span>
-        <span class="body-bird"></span>
-      </div>
+  <div class="birds-layer">
+    <div class="real-bird bird-a">
+      <span class="wing left"></span>
+      <span class="wing right"></span>
+      <span class="body-bird"></span>
     </div>
 
-    <div class="character-container" id="personaje">
-      <img src="assets/img/personaje.png" class="character-bg" alt="Personaje Oasis">
+    <div class="real-bird bird-b">
+      <span class="wing left"></span>
+      <span class="wing right"></span>
+      <span class="body-bird"></span>
     </div>
 
+    <div class="real-bird bird-c">
+      <span class="wing left"></span>
+      <span class="wing right"></span>
+      <span class="body-bird"></span>
+    </div>
+  </div>
+
+  <div class="character-container" id="personaje">
+    <img src="assets/img/personaje.png" class="character-bg" alt="Personaje Oasis">
+  </div>
+
+  <main class="page">
     <section class="content">
       <h1>OASIS</h1>
 
@@ -592,8 +647,7 @@
 
       <p class="extra-info">OASIS ELITE © 2026 - SOPORTE 24HS</p>
     </section>
-
-  </div>
+  </main>
 
   <div id="chat-pointer">
     <div class="pointer-label">RETIRÁ AQUÍ</div>
@@ -629,6 +683,8 @@
     }
 
     document.addEventListener('mousemove', (e) => {
+      if (window.innerWidth < 768) return;
+
       const personaje = document.getElementById('personaje');
       const x = (window.innerWidth / 2 - e.clientX) / 95;
       const y = (window.innerHeight / 2 - e.clientY) / 130;
