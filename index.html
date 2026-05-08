@@ -61,7 +61,7 @@
       width: 100%;
       min-height: 100svh;
       position: relative;
-      z-index: 2;
+      z-index: 3;
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
@@ -112,11 +112,31 @@
       gap: 8px;
       position: relative;
       user-select: none;
+      overflow: hidden;
       transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
       box-shadow:
         0 7px 0 rgba(125, 92, 0, 0.96),
         0 14px 28px rgba(0, 0, 0, 0.56),
         inset 0 2px 0 rgba(255, 255, 255, 0.58);
+    }
+
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,0.38) 45%,
+        transparent 70%
+      );
+      transform: translateX(-130%);
+      transition: transform 0.45s ease;
+      pointer-events: none;
+    }
+
+    .btn:hover::after {
+      transform: translateX(130%);
     }
 
     .btn:hover {
@@ -282,7 +302,8 @@
       }
     }
 
-    .birds-layer {
+    /* LLUVIA DE MONEDAS */
+    .coin-rain {
       position: fixed;
       inset: 0;
       z-index: 1;
@@ -290,136 +311,129 @@
       overflow: hidden;
     }
 
-    .real-bird {
+    .coin {
       position: absolute;
-      width: 48px;
-      height: 30px;
-      opacity: 0.38;
-      filter:
-        drop-shadow(0 0 4px rgba(255,255,255,0.20))
-        drop-shadow(0 6px 8px rgba(0,0,0,0.35));
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-    }
-
-    .body-bird {
-      position: absolute;
-      left: 20px;
-      top: 14px;
-      width: 16px;
-      height: 8px;
-      background: rgba(255,255,255,0.88);
+      top: -80px;
+      width: var(--size);
+      height: var(--size);
       border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, #fff8b0 0%, #ffe66b 16%, #ffcc00 42%, #c99100 70%, #7b4f00 100%);
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.26),
+        inset 0 0 0 5px rgba(255,204,0,0.22),
+        0 0 12px rgba(255,204,0,0.32),
+        0 8px 16px rgba(0,0,0,0.35);
+      opacity: var(--opacity);
+      left: var(--left);
+      animation:
+        coinFall var(--duration) linear infinite,
+        coinSpin var(--spin) linear infinite;
+      animation-delay: var(--delay);
     }
 
-    .body-bird::after {
+    .coin::before {
+      content: "$";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(80, 48, 0, 0.75);
+      font-size: calc(var(--size) * 0.52);
+      font-weight: 900;
+      text-shadow: 0 1px 1px rgba(255,255,255,0.45);
+    }
+
+    .coin::after {
       content: "";
       position: absolute;
-      right: -5px;
-      top: 1px;
-      width: 7px;
-      height: 6px;
-      background: rgba(255,255,255,0.88);
+      inset: 18%;
       border-radius: 50%;
+      border: 1px solid rgba(110,70,0,0.45);
     }
 
-    .wing {
-      position: absolute;
-      top: 12px;
-      width: 28px;
-      height: 12px;
-      background: rgba(255,255,255,0.82);
-      border-radius: 100% 100% 20% 20%;
-    }
-
-    .wing.left {
-      left: 0;
-      transform-origin: right center;
-      animation: flapLeft 0.38s ease-in-out infinite alternate;
-    }
-
-    .wing.right {
-      right: 0;
-      transform-origin: left center;
-      animation: flapRight 0.38s ease-in-out infinite alternate;
-    }
-
-    @keyframes flapLeft {
+    @keyframes coinFall {
       0% {
-        transform: rotate(-34deg) translateY(4px) scaleY(1.05);
+        transform: translate3d(0, -90px, 0) rotateZ(0deg);
       }
-      100% {
-        transform: rotate(34deg) translateY(-7px) scaleY(0.85);
-      }
-    }
-
-    @keyframes flapRight {
-      0% {
-        transform: rotate(34deg) translateY(4px) scaleY(1.05);
-      }
-      100% {
-        transform: rotate(-34deg) translateY(-7px) scaleY(0.85);
-      }
-    }
-
-    .bird-a {
-      top: 12%;
-      left: -90px;
-      animation: birdFlyA 12s infinite;
-    }
-
-    .bird-b {
-      top: 24%;
-      left: -120px;
-      opacity: 0.30;
-      animation: birdFlyB 17s infinite;
-      animation-delay: 3s;
-    }
-
-    .bird-c {
-      top: 8%;
-      left: -140px;
-      opacity: 0.25;
-      animation: birdFlyC 21s infinite;
-      animation-delay: 7s;
-    }
-
-    @keyframes birdFlyA {
-      0% {
-        transform: translateX(-120px) translateY(0) scale(1.05) rotate(0deg);
-      }
-      35% {
-        transform: translateX(36vw) translateY(-18px) scale(1.12) rotate(-8deg);
-      }
-      70% {
-        transform: translateX(76vw) translateY(14px) scale(1.05) rotate(7deg);
-      }
-      100% {
-        transform: translateX(116vw) translateY(5px) scale(1.05) rotate(0deg);
-      }
-    }
-
-    @keyframes birdFlyB {
-      0% {
-        transform: translateX(-140px) translateY(0) scale(0.82) rotate(0deg);
+      25% {
+        transform: translate3d(var(--drift1), 25vh, 0) rotateZ(95deg);
       }
       50% {
-        transform: translateX(58vw) translateY(-18px) scale(0.84) rotate(-6deg);
+        transform: translate3d(var(--drift2), 52vh, 0) rotateZ(180deg);
+      }
+      75% {
+        transform: translate3d(var(--drift3), 78vh, 0) rotateZ(270deg);
       }
       100% {
-        transform: translateX(116vw) translateY(8px) scale(0.82) rotate(0deg);
+        transform: translate3d(var(--drift4), 115vh, 0) rotateZ(360deg);
       }
     }
 
-    @keyframes birdFlyC {
+    @keyframes coinSpin {
       0% {
-        transform: translateX(-160px) translateY(0) scale(0.68) rotate(0deg);
+        filter: brightness(1);
+        transform-style: preserve-3d;
       }
-      52% {
-        transform: translateX(56vw) translateY(18px) scale(0.70) rotate(8deg);
+      50% {
+        filter: brightness(1.35);
       }
       100% {
-        transform: translateX(116vw) translateY(-6px) scale(0.68) rotate(0deg);
+        filter: brightness(1);
+      }
+    }
+
+    /* MONEDAS QUE EXPLOTAN DESDE LOS BOTONES */
+    .coin-burst {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      z-index: 9999;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 32% 28%, #fff8b0 0%, #ffe66b 16%, #ffcc00 42%, #c99100 70%, #7b4f00 100%);
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.25),
+        0 0 14px rgba(255,204,0,0.45),
+        0 8px 16px rgba(0,0,0,0.30);
+      animation: burstCoin 850ms ease-out forwards;
+    }
+
+    .coin-burst::before {
+      content: "$";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(80, 48, 0, 0.78);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    @keyframes burstCoin {
+      0% {
+        opacity: 1;
+        transform:
+          translate(-50%, -50%)
+          translate(0, 0)
+          scale(0.45)
+          rotate(0deg);
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          translate(var(--x), var(--y))
+          scale(var(--scale))
+          rotate(var(--rotate));
       }
     }
 
@@ -532,8 +546,12 @@
         z-index: 2;
       }
 
-      .birds-layer {
-        display: none;
+      .coin-rain {
+        opacity: 0.75;
+      }
+
+      .coin {
+        animation-duration: calc(var(--duration) * 1.2);
       }
 
       #chat-pointer {
@@ -575,25 +593,8 @@
 
 <body>
 
-  <div class="birds-layer">
-    <div class="real-bird bird-a">
-      <span class="wing left"></span>
-      <span class="wing right"></span>
-      <span class="body-bird"></span>
-    </div>
-
-    <div class="real-bird bird-b">
-      <span class="wing left"></span>
-      <span class="wing right"></span>
-      <span class="body-bird"></span>
-    </div>
-
-    <div class="real-bird bird-c">
-      <span class="wing left"></span>
-      <span class="wing right"></span>
-      <span class="body-bird"></span>
-    </div>
-  </div>
+  <!-- LLUVIA DE MONEDAS DE FONDO -->
+  <div class="coin-rain" id="coinRain"></div>
 
   <div class="character-container" id="personaje">
     <img src="assets/img/personaje.png" class="character-bg" alt="Personaje Oasis">
@@ -699,6 +700,80 @@
     document.addEventListener('mouseleave', () => {
       const personaje = document.getElementById('personaje');
       personaje.style.transform = 'translateY(0) rotateY(0deg) rotateX(0deg)';
+    });
+
+    /* CREAR LLUVIA DE MONEDAS */
+    const coinRain = document.getElementById('coinRain');
+    const coinAmount = window.innerWidth < 768 ? 18 : 34;
+
+    for (let i = 0; i < coinAmount; i++) {
+      const coin = document.createElement('span');
+      coin.className = 'coin';
+
+      const size = Math.floor(Math.random() * 14) + 14;
+      const left = Math.random() * 100;
+      const duration = (Math.random() * 5 + 6).toFixed(2) + 's';
+      const delay = (Math.random() * -10).toFixed(2) + 's';
+      const spin = (Math.random() * 1.2 + 0.8).toFixed(2) + 's';
+      const opacity = (Math.random() * 0.35 + 0.25).toFixed(2);
+
+      coin.style.setProperty('--size', size + 'px');
+      coin.style.setProperty('--left', left + 'vw');
+      coin.style.setProperty('--duration', duration);
+      coin.style.setProperty('--delay', delay);
+      coin.style.setProperty('--spin', spin);
+      coin.style.setProperty('--opacity', opacity);
+
+      coin.style.setProperty('--drift1', (Math.random() * 60 - 30) + 'px');
+      coin.style.setProperty('--drift2', (Math.random() * 90 - 45) + 'px');
+      coin.style.setProperty('--drift3', (Math.random() * 70 - 35) + 'px');
+      coin.style.setProperty('--drift4', (Math.random() * 110 - 55) + 'px');
+
+      coinRain.appendChild(coin);
+    }
+
+    /* EXPLOSIÓN DE MONEDAS AL PRESIONAR BOTONES */
+    function createCoinBurst(button) {
+      const rect = button.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const amount = window.innerWidth < 768 ? 12 : 18;
+
+      for (let i = 0; i < amount; i++) {
+        const coin = document.createElement('span');
+        coin.className = 'coin-burst';
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 95 + 45;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance - 35;
+
+        const size = Math.random() * 12 + 15;
+        const scale = Math.random() * 0.7 + 0.65;
+        const rotate = Math.floor(Math.random() * 720 - 360) + 'deg';
+
+        coin.style.left = centerX + 'px';
+        coin.style.top = centerY + 'px';
+        coin.style.width = size + 'px';
+        coin.style.height = size + 'px';
+        coin.style.setProperty('--x', x + 'px');
+        coin.style.setProperty('--y', y + 'px');
+        coin.style.setProperty('--scale', scale);
+        coin.style.setProperty('--rotate', rotate);
+
+        document.body.appendChild(coin);
+
+        setTimeout(() => {
+          coin.remove();
+        }, 900);
+      }
+    }
+
+    document.querySelectorAll('.btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        createCoinBurst(button);
+      });
     });
   </script>
 
